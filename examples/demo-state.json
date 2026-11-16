@@ -1,0 +1,515 @@
+{
+  "date": "2026-11-03",
+  "updated_at": "2026-11-03T13:00:00Z",
+  "queue": {
+    "items": []
+  },
+  "tasks": [
+    {
+      "id": "demo-flow",
+      "task_id": "demo-flow",
+      "key": "demo-flow",
+      "title": "Share the agreed demo flow",
+      "label": "Share the agreed demo flow",
+      "action": "Review the proposed story and send it to the rep.",
+      "short_action": "Review the proposed story and send it to the rep.",
+      "why": "Review the proposed story and send it to the rep.",
+      "owner": "Demo user",
+      "status": "open",
+      "waiting": false,
+      "added_at": "2026-11-02T15:00:00Z",
+      "added_basis": "Fictional demonstration",
+      "due_at": "2026-11-03",
+      "due_label": "Due",
+      "due_basis": "Fictional deadline",
+      "done_when": "Review and share the prepared response",
+      "external_view": "deal-work",
+      "rank": 1,
+      "checks": [],
+      "milestones": [],
+      "checkpoints": [],
+      "waiting_on": [],
+      "dependencies": [],
+      "recipient_name": "Demo rep"
+    },
+    {
+      "id": "demo-resources",
+      "task_id": "demo-resources",
+      "key": "demo-resources",
+      "title": "Send the promised resources",
+      "label": "Send the promised resources",
+      "action": "Check the references and share the prepared response.",
+      "short_action": "Check the references and share the prepared response.",
+      "why": "Check the references and share the prepared response.",
+      "owner": "Demo user",
+      "status": "open",
+      "waiting": false,
+      "added_at": "2026-11-02T15:00:00Z",
+      "added_basis": "Fictional demonstration",
+      "due_at": "2026-11-03",
+      "due_label": "Due",
+      "due_basis": "Fictional deadline",
+      "done_when": "Review and share the prepared response",
+      "external_view": "deal-work",
+      "rank": 2,
+      "checks": [],
+      "milestones": [],
+      "checkpoints": [],
+      "waiting_on": [],
+      "dependencies": []
+    },
+    {
+      "id": "demo-review",
+      "task_id": "demo-review",
+      "key": "demo-review",
+      "title": "Prepare for the team review",
+      "label": "Prepare for the team review",
+      "action": "Review the prepared talking points.",
+      "short_action": "Review the prepared talking points.",
+      "why": "Review the prepared talking points.",
+      "owner": "Demo user",
+      "status": "open",
+      "waiting": false,
+      "added_at": "2026-11-02T15:00:00Z",
+      "added_basis": "Fictional demonstration",
+      "due_at": "2026-11-03",
+      "due_label": "Due",
+      "due_basis": "Fictional deadline",
+      "done_when": "Review and share the prepared response",
+      "external_view": "deal-work",
+      "rank": 1,
+      "checks": [],
+      "milestones": [],
+      "checkpoints": [],
+      "waiting_on": [],
+      "dependencies": [],
+      "lane": "internal"
+    }
+  ],
+  "internal_work": [
+    {
+      "id": "demo-review",
+      "task_id": "demo-review",
+      "key": "demo-review",
+      "title": "Prepare for the team review",
+      "label": "Prepare for the team review",
+      "action": "Review the prepared talking points.",
+      "short_action": "Review the prepared talking points.",
+      "why": "Review the prepared talking points.",
+      "owner": "Demo user",
+      "status": "open",
+      "waiting": false,
+      "added_at": "2026-11-02T15:00:00Z",
+      "added_basis": "Fictional demonstration",
+      "due_at": "2026-11-03",
+      "due_label": "Due",
+      "due_basis": "Fictional deadline",
+      "done_when": "Review and share the prepared response",
+      "external_view": "deal-work",
+      "rank": 1,
+      "checks": [],
+      "milestones": [],
+      "checkpoints": [],
+      "waiting_on": [],
+      "dependencies": [],
+      "lane": "internal"
+    }
+  ],
+  "calls": [],
+  "changes": [],
+  "notes": [],
+  "roster": [],
+  "sms_brief": [],
+  "communications": {
+    "items": [
+      {
+        "id": "demo-draft",
+        "task_id": "demo-flow",
+        "recipient_name": "Demo rep",
+        "body": "Here is the proposed flow: rep workspace \u2192 activity capture \u2192 manager visibility. Does that match the outcomes we agreed?",
+        "outreach_context": {
+          "kind": "promised",
+          "deal": "Cedar Harbor Labs (fictional)",
+          "summary": "A fictional team wants a clearer sales workflow.",
+          "reason": "Review the prepared agenda before the next demo."
+        },
+        "resources": [],
+        "feedback": {},
+        "response_variants": [
+          {
+            "id": "recommended",
+            "label": "Balanced",
+            "recommended": true,
+            "reason": "Clear next step with enough context to act.",
+            "body": "Hey Morgan, here\u2019s the proposed demo flow.\n\n1. Start with the customer outcome.\n2. Show the finished proof using their scenario.\n3. Agree the remaining validation, owner and date.\n\nDoes that match what you want to cover?"
+          },
+          {
+            "id": "quick",
+            "label": "Super concise",
+            "body": "Hey Morgan, I\u2019d go outcome \u2192 finished proof \u2192 next decision. Does that match the plan for the customer session?"
+          },
+          {
+            "id": "expanded",
+            "label": "More detail",
+            "body": "Hey Morgan, I put together a proposed flow for the customer session:\n\n1. Confirm the outcome and what a useful result looks like.\n2. Show one finished example in the customer\u2019s scenario.\n3. Walk through only the supporting workflow needed to explain it.\n4. Agree what remains to validate, who owns it and the next date.\n\nHappy to adjust the emphasis based on the latest conversation."
+          }
+        ],
+        "response_variants_source_body": "Here is the proposed flow: rep workspace \u2192 activity capture \u2192 manager visibility. Does that match the outcomes we agreed?",
+        "response_variants_source_recipient": "Demo rep"
+      },
+      {
+        "id": "demo-manager-note",
+        "task_id": "demo-manager-update",
+        "recipient_name": "Demo manager",
+        "body": "This fictional week: a referenced follow-up was prepared. Next practice: agree the desired customer outcomes before showing the product. This is demonstration text, not a real manager update.",
+        "resources": [],
+        "feedback": {}
+      }
+    ],
+    "bundles": []
+  },
+  "coaching": {
+    "focus": [
+      {
+        "id": "outcome",
+        "title": "Agree the proof before the product",
+        "prompt": "What are the two outcomes you need us to prove today?",
+        "proof_rule": "The customer confirms the outcomes before the demo.",
+        "status": "Fictional practice example",
+        "status_basis": "Demo only",
+        "feedback_ids": [],
+        "competencies": []
+      },
+      {
+        "id": "result",
+        "title": "Show the finished result first",
+        "prompt": "Start with the customer\u2019s result, then explain the workflow.",
+        "proof_rule": "Result before setup.",
+        "status": "Fictional example",
+        "feedback_ids": [],
+        "competencies": []
+      }
+    ],
+    "feedback": [],
+    "evidence": [
+      {
+        "id": "demo-proof",
+        "deal": "Fictional demo account",
+        "source_timestamp": "Demo moment",
+        "text": "A sourced response was prepared in this example.",
+        "result": "Actual customer usefulness is not established.",
+        "kind": "demo_example",
+        "timestamp_basis": "Fictional"
+      },
+      {
+        "id": "demo-gap",
+        "deal": "Fictional demo account",
+        "source_timestamp": "Demo moment",
+        "text": "A fictional opening practice opportunity.",
+        "result": "No real call was reviewed.",
+        "kind": "demo_example",
+        "timestamp_basis": "Fictional"
+      }
+    ],
+    "qci_goals": [],
+    "view": {
+      "mode": "friday",
+      "review": {
+        "week_start": "2026-10-26",
+        "week_end": "2026-10-30",
+        "status": "saved",
+        "headline": "Useful follow-through; keep the opening focused",
+        "highlights": [
+          {
+            "text": "Prepared a referenced follow-up (fictional example)",
+            "evidence_id": "demo-proof"
+          }
+        ],
+        "lowlights": [
+          {
+            "text": "Confirm desired outcomes before showing the product (fictional example)",
+            "evidence_id": "demo-gap"
+          }
+        ],
+        "next_week_focus": [
+          "Use the opening prompt on the next eligible call."
+        ],
+        "manager_communication_id": "demo-manager-update",
+        "coverage": {
+          "summary": "Fictional demo evidence; not a live-source review",
+          "feedback": "Illustrative manager coaching",
+          "slack": "Not connected",
+          "gmail_gong": "Not connected",
+          "gaps": [
+            "Demo records are not proof of real behavior or outcomes."
+          ]
+        }
+      }
+    }
+  },
+  "morning_plan": {
+    "review_date": "2026-11-02",
+    "for_date": "2026-11-03",
+    "priorities": [
+      {
+        "id": "demo-flow",
+        "task_id": "demo-flow",
+        "key": "demo-flow",
+        "title": "Share the agreed demo flow",
+        "label": "Share the agreed demo flow",
+        "action": "Review the proposed story and send it to the rep.",
+        "short_action": "Review the proposed story and send it to the rep.",
+        "why": "Review the proposed story and send it to the rep.",
+        "owner": "Demo user",
+        "status": "open",
+        "waiting": false,
+        "added_at": "2026-11-02T15:00:00Z",
+        "added_basis": "Fictional demonstration",
+        "due_at": "2026-11-03",
+        "due_label": "Due",
+        "due_basis": "Fictional deadline",
+        "done_when": "Review and share the prepared response",
+        "external_view": "deal-work",
+        "rank": 1,
+        "checks": [],
+        "milestones": [],
+        "checkpoints": [],
+        "waiting_on": [],
+        "dependencies": [],
+        "recipient_name": "Demo rep"
+      },
+      {
+        "id": "demo-resources",
+        "task_id": "demo-resources",
+        "key": "demo-resources",
+        "title": "Send the promised resources",
+        "label": "Send the promised resources",
+        "action": "Check the references and share the prepared response.",
+        "short_action": "Check the references and share the prepared response.",
+        "why": "Check the references and share the prepared response.",
+        "owner": "Demo user",
+        "status": "open",
+        "waiting": false,
+        "added_at": "2026-11-02T15:00:00Z",
+        "added_basis": "Fictional demonstration",
+        "due_at": "2026-11-03",
+        "due_label": "Due",
+        "due_basis": "Fictional deadline",
+        "done_when": "Review and share the prepared response",
+        "external_view": "deal-work",
+        "rank": 2,
+        "checks": [],
+        "milestones": [],
+        "checkpoints": [],
+        "waiting_on": [],
+        "dependencies": []
+      }
+    ],
+    "deal_work": [
+      {
+        "id": "demo-flow",
+        "task_id": "demo-flow",
+        "key": "demo-flow",
+        "title": "Share the agreed demo flow",
+        "label": "Share the agreed demo flow",
+        "action": "Review the proposed story and send it to the rep.",
+        "short_action": "Review the proposed story and send it to the rep.",
+        "why": "Review the proposed story and send it to the rep.",
+        "owner": "Demo user",
+        "status": "open",
+        "waiting": false,
+        "added_at": "2026-11-02T15:00:00Z",
+        "added_basis": "Fictional demonstration",
+        "due_at": "2026-11-03",
+        "due_label": "Due",
+        "due_basis": "Fictional deadline",
+        "done_when": "Review and share the prepared response",
+        "external_view": "deal-work",
+        "rank": 1,
+        "checks": [],
+        "milestones": [],
+        "checkpoints": [],
+        "waiting_on": [],
+        "dependencies": [],
+        "recipient_name": "Demo rep"
+      },
+      {
+        "id": "demo-resources",
+        "task_id": "demo-resources",
+        "key": "demo-resources",
+        "title": "Send the promised resources",
+        "label": "Send the promised resources",
+        "action": "Check the references and share the prepared response.",
+        "short_action": "Check the references and share the prepared response.",
+        "why": "Check the references and share the prepared response.",
+        "owner": "Demo user",
+        "status": "open",
+        "waiting": false,
+        "added_at": "2026-11-02T15:00:00Z",
+        "added_basis": "Fictional demonstration",
+        "due_at": "2026-11-03",
+        "due_label": "Due",
+        "due_basis": "Fictional deadline",
+        "done_when": "Review and share the prepared response",
+        "external_view": "deal-work",
+        "rank": 2,
+        "checks": [],
+        "milestones": [],
+        "checkpoints": [],
+        "waiting_on": [],
+        "dependencies": []
+      }
+    ],
+    "first_touchpoints": [],
+    "internal": [
+      {
+        "id": "demo-review",
+        "task_id": "demo-review",
+        "key": "demo-review",
+        "title": "Prepare for the team review",
+        "label": "Prepare for the team review",
+        "action": "Review the prepared talking points.",
+        "short_action": "Review the prepared talking points.",
+        "why": "Review the prepared talking points.",
+        "owner": "Demo user",
+        "status": "open",
+        "waiting": false,
+        "added_at": "2026-11-02T15:00:00Z",
+        "added_basis": "Fictional demonstration",
+        "due_at": "2026-11-03",
+        "due_label": "Due",
+        "due_basis": "Fictional deadline",
+        "done_when": "Review and share the prepared response",
+        "external_view": "deal-work",
+        "rank": 1,
+        "checks": [],
+        "milestones": [],
+        "checkpoints": [],
+        "waiting_on": [],
+        "dependencies": [],
+        "lane": "internal"
+      }
+    ],
+    "accomplishments": [],
+    "later_prep": [],
+    "not_on_today": [],
+    "communication_groups": [],
+    "new_commitments": [],
+    "pending_updates": [],
+    "source_limits": [
+      "Entirely fictional demonstration data"
+    ],
+    "date_basis": "Demo only"
+  },
+  "snapshot": {
+    "month": "Demo month",
+    "metrics": {
+      "calls": {
+        "external": 42,
+        "internal": 18,
+        "as_of": "2026-11-03T13:00:00Z",
+        "basis": "Fictional demonstration"
+      },
+      "revenue": {
+        "actual": 18500,
+        "goal": 15000,
+        "currency": "USD",
+        "led_wins": 3,
+        "assisted_wins": 2,
+        "as_of": "2026-11-03T13:00:00Z",
+        "basis": "Fictional demonstration"
+      },
+      "upcoming": {},
+      "roster": {
+        "open_assigned": 8
+      }
+    },
+    "schedule": [
+      {
+        "id": "demo-meeting",
+        "title": "Cedar Harbor Labs \u00b7 Demo (fictional)",
+        "at": "2026-11-03T18:00:00Z",
+        "end_at": "2026-11-03T19:00:00Z",
+        "rsvp": "accepted",
+        "source_updated": "2026-11-03T13:00:00Z"
+      }
+    ],
+    "feed": []
+  },
+  "weekly_suggestions": {
+    "items": []
+  },
+  "task_history": {
+    "items": {}
+  },
+  "prep_links": {},
+  "product_roadblocks": {
+    "roadblocks": [
+      {
+        "id": "demo-roadblock-0",
+        "status": "submitted_verified",
+        "submitted_at": "2026-11-03T09:00:00Z"
+      },
+      {
+        "id": "demo-roadblock-1",
+        "status": "submitted_verified",
+        "submitted_at": "2026-11-03T09:00:00Z"
+      },
+      {
+        "id": "demo-roadblock-2",
+        "status": "submitted_verified",
+        "submitted_at": "2026-11-03T09:00:00Z"
+      },
+      {
+        "id": "demo-roadblock-3",
+        "status": "submitted_verified",
+        "submitted_at": "2026-11-03T09:00:00Z"
+      },
+      {
+        "id": "demo-roadblock-4",
+        "status": "submitted_verified",
+        "submitted_at": "2026-11-03T09:00:00Z"
+      },
+      {
+        "id": "demo-roadblock-5",
+        "status": "submitted_verified",
+        "submitted_at": "2026-11-03T09:00:00Z"
+      },
+      {
+        "id": "demo-roadblock-6",
+        "status": "submitted_verified",
+        "submitted_at": "2026-11-03T09:00:00Z"
+      }
+    ]
+  },
+  "task_briefs": {
+    "items": {
+      "demo-flow": {
+        "kind": "Requested \u00b7 fictional example",
+        "requests": [
+          {
+            "person": "Demo rep \u00b7 fictional",
+            "date": "Example date",
+            "quote": "Can you send me the proposed demo flow before our prep?",
+            "basis": "Synthetic example, not a real request"
+          }
+        ],
+        "recommended_answer": "Use the existing outcome-first flow: rep workspace, activity capture, then manager visibility. Confirm those are the outcomes the team wants to validate.",
+        "needed_from_you": "Approve or adjust the proposed flow and share it through your authorized channel.",
+        "trigger": "The fictional rep asked for the proposed flow before the next prep.",
+        "people": "Demo rep is a fictional sales counterpart.",
+        "facts": [
+          "The proposed sequence is prepared; no demonstration or customer acceptance is claimed."
+        ],
+        "action": "Review the proposed story and send it to the rep.",
+        "done_when": "The reviewed flow reaches the rep through a verified, authorized send.",
+        "caveats": "Fictional preview only. No real account or customer is connected.",
+        "sources": [
+          {
+            "label": "Fictional example packet"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "date": null,
+  "updated_at": null,
+  "queue": {
+    "items": []
+  },
+  "tasks": [],
+  "internal_work": [],
+  "calls": [],
+  "changes": [],
+  "notes": [],
+  "roster": [],
+  "sms_brief": [],
+  "communications": {
+    "items": [],
+    "bundles": []
+  },
+  "coaching": {
+    "focus": [],
+    "feedback": [],
+    "evidence": [],
+    "qci_goals": [],
+    "view": {}
+  },
+  "morning_plan": {
+    "review_date": null,
+    "for_date": null,
+    "priorities": [],
+    "deal_work": [],
+    "first_touchpoints": [],
+    "internal": [],
+    "accomplishments": [],
+    "later_prep": [],
+    "not_on_today": [],
+    "communication_groups": [],
+    "new_commitments": [],
+    "pending_updates": [],
+    "source_limits": [
+      "No live-source run has been verified yet."
+    ],
+    "date_basis": "Source evidence required"
+  },
+  "snapshot": {
+    "metrics": {},
+    "schedule": [],
+    "feed": []
+  },
+  "weekly_suggestions": {
+    "items": []
+  },
+  "task_history": {
+    "items": {}
+  },
+  "prep_links": {}
+}

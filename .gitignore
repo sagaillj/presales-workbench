@@ -1,0 +1,8 @@
+workspace/
+*.local.json
+*.log
+__pycache__/
+.DS_Store
+.env
+.env.*
+*.zip

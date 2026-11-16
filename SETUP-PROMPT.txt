@@ -1,0 +1,1 @@
+I downloaded the SE Workbench starter ZIP to Downloads. Please find it, unpack it into its own permanent folder, and follow its AGENTS.md and docs/ONBOARDING.md to set it up for me. Walk me through onboarding and defaults, show me Workbench first, then ask before reading work sources. Run the first-test checklist with me. Keep writes and automations off until I approve them.

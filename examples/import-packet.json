@@ -1,0 +1,90 @@
+{
+  "tasks": [
+    {
+      "id": "sample-follow-up",
+      "task_id": "sample-follow-up",
+      "key": "sample-follow-up",
+      "title": "Review a source-backed follow-up",
+      "label": "Review a source-backed follow-up",
+      "action": "Replace this fictional example with the actual sourced ask.",
+      "short_action": "Replace this fictional example with the actual sourced ask.",
+      "why": "Replace this fictional example with the actual sourced ask.",
+      "owner": "Demo user",
+      "status": "open",
+      "waiting": false,
+      "added_at": "2026-11-02T15:00:00Z",
+      "added_basis": "Fictional demonstration",
+      "due_at": "2026-11-03",
+      "due_label": "Due",
+      "due_basis": "Fictional deadline",
+      "done_when": "Review and share the prepared response",
+      "external_view": "deal-work",
+      "rank": 1,
+      "checks": [],
+      "milestones": [],
+      "checkpoints": [],
+      "waiting_on": [],
+      "dependencies": []
+    }
+  ],
+  "morning_plan": {
+    "priorities": [
+      {
+        "id": "sample-follow-up",
+        "task_id": "sample-follow-up",
+        "key": "sample-follow-up",
+        "title": "Review a source-backed follow-up",
+        "label": "Review a source-backed follow-up",
+        "action": "Replace this fictional example with the actual sourced ask.",
+        "short_action": "Replace this fictional example with the actual sourced ask.",
+        "why": "Replace this fictional example with the actual sourced ask.",
+        "owner": "Demo user",
+        "status": "open",
+        "waiting": false,
+        "added_at": "2026-11-02T15:00:00Z",
+        "added_basis": "Fictional demonstration",
+        "due_at": "2026-11-03",
+        "due_label": "Due",
+        "due_basis": "Fictional deadline",
+        "done_when": "Review and share the prepared response",
+        "external_view": "deal-work",
+        "rank": 1,
+        "checks": [],
+        "milestones": [],
+        "checkpoints": [],
+        "waiting_on": [],
+        "dependencies": []
+      }
+    ]
+  },
+  "task_briefs": {
+    "items": {
+      "sample-follow-up": {
+        "kind": "Requested \u00b7 fictional example",
+        "requests": [
+          {
+            "person": "Demo rep \u00b7 fictional",
+            "date": "Example date",
+            "quote": "Can you send me the proposed demo flow before our prep?",
+            "basis": "Synthetic example, not a real request"
+          }
+        ],
+        "recommended_answer": "Use the existing outcome-first flow: rep workspace, activity capture, then manager visibility. Confirm those are the outcomes the team wants to validate.",
+        "needed_from_you": "Approve or adjust the proposed flow and share it through your authorized channel.",
+        "trigger": "The fictional rep asked for the proposed flow before the next prep.",
+        "people": "Demo rep is a fictional sales counterpart.",
+        "facts": [
+          "The proposed sequence is prepared; no demonstration or customer acceptance is claimed."
+        ],
+        "action": "Replace this fictional example with the actual sourced ask.",
+        "done_when": "The reviewed flow reaches the rep through a verified, authorized send.",
+        "caveats": "Fictional preview only. No real account or customer is connected.",
+        "sources": [
+          {
+            "label": "Fictional example packet"
+          }
+        ]
+      }
+    }
+  }
+}

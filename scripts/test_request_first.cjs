@@ -1,0 +1,16 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
+const root=path.join(__dirname,'..'),html=fs.readFileSync(path.join(root,'app/index.html'),'utf8');
+for(const [,code] of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(code);
+const names=['cardBrief','briefSource','artifactLinks','requestExcerpt','decisionBrief','messageText','formatMessage','hasDraft','inlineDraft'];
+const code=html.split('\n').filter(l=>names.some(n=>l.startsWith(`function ${n}(`))).join('\n');
+const demo=JSON.parse(fs.readFileSync(path.join(root,'examples/demo-state.json'),'utf8'));
+const ctx=vm.createContext({data:demo,context:()=>'',esc:s=>String(s??'').replaceAll('<','&lt;').replaceAll('"','&quot;')});vm.runInContext(code,ctx);
+const task=demo.morning_plan.priorities[0],out=ctx.decisionBrief(task);
+assert.ok(out.indexOf('The question / request')<out.indexOf('Recommended answer'));
+assert.match(out,/Can you send me the proposed demo flow/);
+assert.match(out,/<details class="more-context"><summary>More context<\/summary>/);
+assert.ok(!out.split('<details class="more-context">')[0].includes('Relevant background'));
+ctx.data.communications.items=[{task_id:'sent',status:'verified_sent'}];
+assert.equal(ctx.hasDraft({task_id:'sent'}),false);assert.equal(ctx.inlineDraft({task_id:'sent'}),'');
+assert.ok(!ctx.briefSource({label:'unsafe',url:'javascript:alert(1)'}).includes('<a'));
+console.log('Request-first rendering, collapsed context, sent handling, safe links and inline scripts: passed');

@@ -1,0 +1,87 @@
+{
+  "schema_version": 2,
+  "mode": "demo",
+  "identity": {
+    "name": null,
+    "email": null,
+    "title": null,
+    "verified": false
+  },
+  "organization": {
+    "company": null,
+    "workspace": null,
+    "role_lane": null,
+    "segment": null,
+    "geography": null,
+    "country": null,
+    "timezone": null,
+    "manager": {
+      "name": null,
+      "email": null
+    },
+    "director": {
+      "name": null,
+      "email": null
+    }
+  },
+  "hubspot": {
+    "portal_id": null,
+    "owner_id": null,
+    "se_owner_property": null,
+    "se_status_property": null,
+    "tech_win_property": null,
+    "se_notes_property": null
+  },
+  "sources": {},
+  "identity_evidence": [],
+  "qci": {
+    "goals": [],
+    "practices": []
+  },
+  "permissions": {
+    "log_calls": false,
+    "update_se_status": false,
+    "update_tech_win": false,
+    "update_se_notes": false,
+    "submit_roadblocks": false,
+    "send_messages": false,
+    "calendar_writes": false,
+    "generate_demo_portal": false
+  },
+  "write_authorizations": [],
+  "schedules": {
+    "enabled": false,
+    "daily": {
+      "weekdays_only": true,
+      "local_time": "17:30"
+    },
+    "weekly": {
+      "weekday": "Friday",
+      "local_time": "18:00"
+    }
+  },
+  "policies": {
+    "active_window_days": null,
+    "se_status_definitions_verified": false,
+    "tech_win_definitions_verified": false
+  },
+  "preferences": {
+    "goals": [],
+    "demo_flow": null,
+    "demo_preferences": null,
+    "modules": {
+      "daily_closeout": true,
+      "call_hygiene": true,
+      "deal_followthrough": true,
+      "demo_prep": true,
+      "weekly_qci": true,
+      "scorecard": true
+    }
+  },
+  "onboarding": {
+    "stage": "not_started",
+    "preview_seen": false,
+    "updated_at": null
+  },
+  "read_requests": {}
+}
