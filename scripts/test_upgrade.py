@@ -20,4 +20,15 @@ class UpgradeTests(unittest.TestCase):
             a,b=Path(t)/'new',Path(t)/'existing';make(a,'new');make(b,'old');(b/'workbench.py').write_text('my edit')
             with self.assertRaises(ValueError):m.upgrade(a,b)
             self.assertEqual((b/'workbench.py').read_text(),'my edit');self.assertFalse((b/'workspace').exists())
+    def test_case_variants_workspace_and_traversal_are_rejected(self):
+        with tempfile.TemporaryDirectory() as t:
+            for name in ['Workspace/profile.json','WORKSPACE/personal/state.json','../escape','/tmp/escape']:
+                with self.subTest(name=name),self.assertRaises(ValueError):m.safe(Path(t),name)
+    def test_unchanged_release_file_keeps_local_edit(self):
+        with tempfile.TemporaryDirectory() as t:
+            a,b=Path(t)/'new',Path(t)/'existing';make(a,'original');make(b,'original');(b/'workbench.py').write_text('my edit')
+            m.upgrade(a,b);self.assertEqual((b/'workbench.py').read_text(),'my edit')
+    def test_missing_manifest_has_actionable_error(self):
+        with tempfile.TemporaryDirectory() as t:
+            with self.assertRaisesRegex(ValueError,'no bundle manifest'):m.entries(Path(t))
 if __name__=='__main__':unittest.main(verbosity=2)

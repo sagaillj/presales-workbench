@@ -83,3 +83,9 @@ The local runtime and fictional-data interface are testable without connected ac
 ## Updates
 
 See RELEASE-NOTES.md for this version and docs/UPGRADING.md for an upgrade that preserves your existing workspace. Request-first cards are described in docs/ACTION-CARDS.md.
+
+### New in v0.5
+
+A compact combined header, Customer work/Internal work, a collapsible Schedule/Activity/Completed sidebar, simpler reply boxes, Coaching and Metrics views, five colorways and custom appearance settings. Setup covers call capture, approved writing-style orientation and the hour-plus guided setup expectation.
+
+Optional weekly or biweekly product feedback stays in Workbench. Choose a score and Submit; your own fields and selected local counts go to the Workbench feedback Form, with a verified receipt when the collector is available. The prefilled Google Form is the fallback. Nothing submits automatically. Settings also checks for new public GitHub releases and offers a guided upgrade that preserves your workspace.

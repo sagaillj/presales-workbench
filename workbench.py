@@ -20,6 +20,9 @@ import zipfile
 ROOT=Path(__file__).resolve().parent
 sys.path.insert(0,str(ROOT/'app'))
 import onboarding
+import product_feedback
+if (ROOT/'VERSION').exists():
+    product_feedback.VERSION=(ROOT/'VERSION').read_text().strip()
 from card_order import update_order
 ALLOWED_DIRS={'.agents','.claude','app','automations','docs','examples','scripts'}
 ALLOWED_FILES={'workbench.py','README.md','START-HERE.html','AGENTS.md','CLAUDE.md','profile.example.json','.gitignore','Start Workbench.command','Start Workbench.cmd','VERSION','RELEASE-NOTES.md','BUNDLE-MANIFEST.json','PACKAGE-REPORT.json','SETUP-PROMPT.txt'}
@@ -88,6 +91,9 @@ class Store:
             state=read_json(self.root/'examples'/name)
             if self.mode=='demo':
                 state=shift_demo(state,(date.today()-date.fromisoformat(state['date'])).days)
+                if isinstance(state.get('snapshot'),dict):
+                    state['snapshot']['month']=date.today().strftime('%Y-%m')
+                    if isinstance(state['snapshot'].get('metrics',{}).get('revenue'),dict):state['snapshot']['metrics']['revenue']['month']=state['snapshot']['month']
                 # Demo counters should remain visible regardless of local hour.
                 for row in state.get('product_roadblocks',{}).get('roadblocks',[]):row['submitted_at']=(datetime.now(timezone.utc)-timedelta(seconds=1)).isoformat()
             atomic_json(self.state_path,validate_state(state))
@@ -108,6 +114,10 @@ class Store:
             profile=read_json(self.profile_path,read_json(self.root/'profile.example.json'))
             profile=onboarding.update(profile,body)
             atomic_json(self.profile_path,profile)
+            if body.get('action')=='preferences' and ('feedback_cadence' in body or 'feedback_sharing' in body):
+                folder=self.root/'workspace/personal';settings=read_json(folder/'product-feedback.json',{});pref=profile.get('preferences',{}).get('product_feedback',{})
+                settings.update(enabled=pref.get('mode')!='off',cadence_weeks=pref.get('cadence_weeks',1),cadence_anchor=product_feedback.week_key(product_feedback.now_at(zone=profile.get('organization',{}).get('timezone') or 'UTC')))
+                atomic_json(folder/'product-feedback.json',settings)
             summary=onboarding.handoff(profile)
             (self.root/'workspace/SETUP-HANDOFF.txt').write_text(summary+'\n')
             return {'saved':True,'profile':profile,'handoff':summary}
@@ -171,13 +181,20 @@ class Handler(BaseHTTPRequestHandler):
             return stores[mode]
     def do_GET(self):
         route=urlsplit(self.path).path
+        if route=='/api/release':return self.send(200,product_feedback.release_status())
+        if route=='/api/product-feedback':
+            store=self.selected_store();profile=read_json(store.profile_path,store.profile)
+            result=product_feedback.summary(store.folder,read_json(store.progress_path,{}),zone=profile.get('organization',{}).get('timezone') or 'UTC',contact=read_json(store.root/'app/product-contact.json',{}),operator=profile.get('identity',{}).get('email'));return self.send(200,result)
         if route=='/api/state':
             try:return self.send(200,self.selected_store().state())
             except ValueError as e:return self.send(400,{'error':str(e)})
         if route=='/api/onboarding':
             profile=read_json(self.server.store.profile_path,read_json(self.server.store.root/'profile.example.json'))
             return self.send(200,{'profile':profile,'handoff':onboarding.handoff(profile)})
-        files={'/card-order.js':('app/card-order.js','text/javascript'),'/setup':('app/setup.html','text/html; charset=utf-8'),'/':('app/index.html','text/html; charset=utf-8'),'/completion.js':('app/completion.js','text/javascript'),'/favicon.svg':('app/favicon.svg','image/svg+xml'),'/favicon.ico':('app/favicon.svg','image/svg+xml'),'/branding/hubspot-sprocket.svg':('app/branding/hubspot-sprocket.svg','image/svg+xml'),'/branding/workbench-hammock.png':('app/branding/workbench-hammock.png','image/png')}
+        files={'/reply-links.js':('app/reply-links.js','text/javascript'),'/reply-cards.css':('app/reply-cards.css','text/css'),'/branding/slack-icon.svg':('app/branding/slack-icon.svg','image/svg+xml'),'/branding/gmail-icon.svg':('app/branding/gmail-icon.svg','image/svg+xml'),'/card-order.js':('app/card-order.js','text/javascript'),'/setup':('app/setup.html','text/html; charset=utf-8'),'/':('app/index.html','text/html; charset=utf-8'),'/completion.js':('app/completion.js','text/javascript'),'/favicon.svg':('app/favicon.svg','image/svg+xml'),'/favicon.ico':('app/favicon.svg','image/svg+xml'),'/branding/hubspot-sprocket.svg':('app/branding/hubspot-sprocket.svg','image/svg+xml'),'/branding/workbench-hammock.png':('app/branding/workbench-hammock.png','image/png')}
+        for asset in ['insight-views.js','insight-views.css','header-variants.css','appearance.js','product-feedback.js','product-feedback.css','presentation.js']:
+            files['/'+asset]=('app/'+asset,'text/javascript; charset=utf-8' if asset.endswith('.js') else 'text/css; charset=utf-8')
+        files['/branding/lexend-deca.ttf']=('app/branding/lexend-deca.ttf','font/ttf')
         if route in files:
             file,mime=files[route];return self.send(200,(self.server.store.root/file).read_bytes(),mime)
         return self.send(404,{'error':'Not found'})
@@ -190,7 +207,10 @@ class Handler(BaseHTTPRequestHandler):
             body=json.loads(self.rfile.read(size))
             if not isinstance(body,dict):raise ValueError('Expected object')
             route=urlsplit(self.path).path
-            if route=='/api/onboarding':result=self.server.store.setup(body)
+            if route=='/api/product-feedback':
+                store=self.selected_store();profile=read_json(store.profile_path,store.profile)
+                result=product_feedback.update(store.folder,body,read_json(store.progress_path,{}),read_json(store.root/'app/product-contact.json',{}),profile.get('identity',{}).get('email'),zone=profile.get('organization',{}).get('timezone') or 'UTC')
+            elif route=='/api/onboarding':result=self.server.store.setup(body)
             elif route=='/api/card-order':result=self.selected_store().order(body)
             elif route=='/api/progress':result=self.selected_store().progress(body)
             elif route=='/api/weekly-suggestions':result=self.selected_store().suggestion(body)
@@ -212,7 +232,7 @@ def export_bundle(root,destination):
     return destination
 
 def main():
-    parser=argparse.ArgumentParser(description='Local presales Workbench; no direct external writes')
+    parser=argparse.ArgumentParser(description='Local presales Workbench; explicit feedback submission only, no CRM or message transport')
     commands=parser.add_subparsers(dest='command')
     serve=commands.add_parser('serve');serve.add_argument('--port',type=int,default=8781);serve.add_argument('--mode',choices=['demo','personal']);serve.add_argument('--open',action='store_true')
     commands.add_parser('doctor')
@@ -223,7 +243,7 @@ def main():
     if args.command=='export':print(export_bundle(ROOT,args.destination));return
     if args.command=='doctor':
         profile=read_json(ROOT/'workspace/profile.json',read_json(ROOT/'profile.example.json'))
-        print(json.dumps({'python_supported':sys.version_info>=(3,10),'mode':profile.get('mode'),'identity_verified':profile.get('identity',{}).get('verified',False),'sources':profile.get('sources',{}),'schedules':'Templates only; configure with your assistant after a manual run','external_transport':'Not bundled; use your own authorized connectors'},indent=2));return
+        print(json.dumps({'python_supported':sys.version_info>=(3,10),'mode':profile.get('mode'),'identity_verified':profile.get('identity',{}).get('verified',False),'sources':profile.get('sources',{}),'schedules':'Templates only; configure with your assistant after a manual run','external_transport':'No CRM/message transport. Feedback submits only on your click to the fixed collector; public GitHub metadata checks can be disabled.'},indent=2));return
     store=Store(mode=getattr(args,'mode',None))
     if args.command=='configure':print(json.dumps(store.setup(read_json(Path(args.answers)))));return
     if args.command=='import':print(json.dumps(store.import_packet(read_json(Path(args.packet)))));return

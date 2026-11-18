@@ -1,0 +1,15 @@
+{
+  "feedback_email": "jsagaille@hubspot.com",
+  "repository": "https://github.com/sagaillj/presales-workbench",
+  "feedback_form": {
+    "url": "https://docs.google.com/forms/d/e/1FAIpQLSeo0TAy_1Rx4Tmh-ONIr-a0-iwj98JkQmzUNFtGYvylmph5Eg/viewform",
+    "entries": {
+      "rating": "entry.1573174724",
+      "hours": "entry.1783249486",
+      "comments": "entry.925394720",
+      "usage": "entry.158065019",
+      "email": "entry.1787280023"
+    },
+    "endpoint": "https://script.google.com/macros/s/AKfycbzZ7_M6eBWsSGda2ZUVMpzOd0uEB7S7fI7yjBGQdgZwAmDWhLmDvDe9mxFkY-xklRM1/exec"
+  }
+}

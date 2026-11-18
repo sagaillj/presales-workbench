@@ -9,11 +9,11 @@
       "id": "demo-flow",
       "task_id": "demo-flow",
       "key": "demo-flow",
-      "title": "Share the agreed demo flow",
-      "label": "Share the agreed demo flow",
-      "action": "Review the proposed story and send it to the rep.",
-      "short_action": "Review the proposed story and send it to the rep.",
-      "why": "Review the proposed story and send it to the rep.",
+      "title": "Northstar Labs \u00b7 Answer Morgan\u2019s login question",
+      "label": "Reply to Morgan in Slack.",
+      "action": "Review the answer and reply to Morgan in Slack.",
+      "short_action": "Reply to Morgan in Slack.",
+      "why": "Morgan asked how contractors would sign in before the next demo.",
       "owner": "Demo user",
       "status": "open",
       "waiting": false,
@@ -30,7 +30,7 @@
       "checkpoints": [],
       "waiting_on": [],
       "dependencies": [],
-      "recipient_name": "Demo rep"
+      "recipient_name": "Morgan Lee"
     },
     {
       "id": "demo-resources",
@@ -84,6 +84,38 @@
       "waiting_on": [],
       "dependencies": [],
       "lane": "internal"
+    },
+    {
+      "id": "demo-intro",
+      "task_id": "demo-intro",
+      "key": "demo-intro",
+      "title": "New deal \u00b7 Check in with Avery",
+      "label": "Check in with Avery",
+      "action": "Slack Avery about the new deal.",
+      "short_action": "Slack Avery about the new deal.",
+      "why": "You were assigned to a new deal.",
+      "owner": "Demo user",
+      "status": "open",
+      "waiting": false,
+      "added_at": "2026-11-02T15:00:00Z",
+      "added_basis": "Fictional demonstration",
+      "due_at": "2026-11-03",
+      "due_label": "Due",
+      "due_basis": "Fictional deadline",
+      "done_when": "Review and share the prepared response",
+      "external_view": "first-touchpoints",
+      "rank": 1,
+      "checks": [],
+      "milestones": [],
+      "checkpoints": [],
+      "waiting_on": [],
+      "dependencies": [],
+      "recipient_name": "Avery Chen",
+      "intake": {
+        "ae": "Avery Chen",
+        "name": "Cedar Harbor Labs",
+        "classification": "outreach_to_confirm"
+      }
     }
   ],
   "internal_work": [
@@ -125,37 +157,38 @@
       {
         "id": "demo-draft",
         "task_id": "demo-flow",
-        "recipient_name": "Demo rep",
-        "body": "Here is the proposed flow: rep workspace \u2192 activity capture \u2192 manager visibility. Does that match the outcomes we agreed?",
+        "recipient_name": "Morgan Lee",
+        "body": "Hey Morgan, I\u2019d start with SSO through your existing identity provider. Can you send me which IdP the contractors use so I can confirm the right setup?",
         "outreach_context": {
           "kind": "promised",
-          "deal": "Cedar Harbor Labs (fictional)",
-          "summary": "A fictional team wants a clearer sales workflow.",
-          "reason": "Review the prepared agenda before the next demo."
+          "deal": "Northstar Labs",
+          "summary": "Contractor access is an open question before the next demo.",
+          "reason": "Morgan asked for help with the login approach."
         },
         "resources": [],
         "feedback": {},
         "response_variants": [
           {
             "id": "recommended",
-            "label": "Balanced",
             "recommended": true,
-            "reason": "Clear next step with enough context to act.",
-            "body": "Hey Morgan, here\u2019s the proposed demo flow.\n\n1. Start with the customer outcome.\n2. Show the finished proof using their scenario.\n3. Agree the remaining validation, owner and date.\n\nDoes that match what you want to cover?"
+            "label": "Default",
+            "body": "Hey Morgan, I\u2019d start with SSO through your existing identity provider. Can you send me which IdP the contractors use so I can confirm the right setup?"
           },
           {
-            "id": "quick",
-            "label": "Super concise",
-            "body": "Hey Morgan, I\u2019d go outcome \u2192 finished proof \u2192 next decision. Does that match the plan for the customer session?"
+            "id": "concise",
+            "label": "Concise",
+            "body": "Hey Morgan, which identity provider do the contractors use? I\u2019ll check the SSO setup before our demo."
           },
           {
-            "id": "expanded",
-            "label": "More detail",
-            "body": "Hey Morgan, I put together a proposed flow for the customer session:\n\n1. Confirm the outcome and what a useful result looks like.\n2. Show one finished example in the customer\u2019s scenario.\n3. Walk through only the supporting workflow needed to explain it.\n4. Agree what remains to validate, who owns it and the next date.\n\nHappy to adjust the emphasis based on the latest conversation."
+            "id": "detailed",
+            "label": "Detailed",
+            "body": "Hey Morgan, I\u2019d start by checking SSO through your existing identity provider. Can you send me which IdP your contractors use and whether they already have accounts there? I\u2019ll confirm the setup before our demo."
           }
         ],
-        "response_variants_source_body": "Here is the proposed flow: rep workspace \u2192 activity capture \u2192 manager visibility. Does that match the outcomes we agreed?",
-        "response_variants_source_recipient": "Demo rep"
+        "response_variants_source_body": "Hey Morgan, I\u2019d start with SSO through your existing identity provider. Can you send me which IdP the contractors use so I can confirm the right setup?",
+        "response_variants_source_recipient": "Morgan Lee",
+        "channel": "Slack",
+        "source_url": "https://example.com/messages/morgan/1"
       },
       {
         "id": "demo-manager-note",
@@ -164,6 +197,18 @@
         "body": "This fictional week: a referenced follow-up was prepared. Next practice: agree the desired customer outcomes before showing the product. This is demonstration text, not a real manager update.",
         "resources": [],
         "feedback": {}
+      },
+      {
+        "id": "demo-intro-draft",
+        "task_id": "demo-intro",
+        "recipient_name": "Avery Chen",
+        "channel": "Slack",
+        "source_url": "https://example.com/messages/avery/1",
+        "body": "Hey Avery! I saw I was added to Cedar Harbor. Anything in particular I can help with?",
+        "presentation": "first_touch",
+        "outreach_context": {
+          "deal": "Cedar Harbor Labs"
+        }
       }
     ],
     "bundles": []
@@ -190,7 +235,13 @@
         "competencies": []
       }
     ],
-    "feedback": [],
+    "feedback": [
+      {
+        "manager": "Jordan Ellis",
+        "received_date": "2026-11-02",
+        "text": "The outcome-first opening made the story easier to follow. Keep that rhythm."
+      }
+    ],
     "evidence": [
       {
         "id": "demo-proof",
@@ -211,7 +262,25 @@
         "timestamp_basis": "Fictional"
       }
     ],
-    "qci_goals": [],
+    "qci_goals": [
+      {
+        "id": "outcome-led",
+        "title": "Lead with outcomes",
+        "next_action": "Open with the buyer\u2019s goal, then show one clear proof point.",
+        "status": "Building consistency"
+      },
+      {
+        "id": "follow-through",
+        "title": "Close the loop",
+        "next_action": "Confirm the next action, owner and date before ending a call.",
+        "status": "Weekly practice"
+      },
+      {
+        "id": "reusable-learning",
+        "title": "Make learning reusable",
+        "next_action": "Turn one useful experiment into a guide the team can try."
+      }
+    ],
     "view": {
       "mode": "friday",
       "review": {
@@ -245,7 +314,35 @@
           ]
         }
       }
-    }
+    },
+    "weekly_reviews": [
+      {
+        "week_start": "2026-10-26",
+        "week_end": "2026-10-30",
+        "headline": "A clearer story and cleaner follow-through",
+        "highlights": [
+          {
+            "text": "Turned a customer question into a researched answer before the next demo."
+          }
+        ],
+        "next_week_focus": [
+          "Pause after the proof point and check what remains to validate."
+        ]
+      },
+      {
+        "week_start": "2026-11-02",
+        "week_end": "2026-11-06",
+        "headline": "Keep the buyer outcome in view",
+        "highlights": [
+          {
+            "text": "Made next steps explicit with a named owner and date."
+          }
+        ],
+        "next_week_focus": [
+          "Start each demo with the customer\u2019s decision."
+        ]
+      }
+    ]
   },
   "morning_plan": {
     "review_date": "2026-11-02",
@@ -255,11 +352,11 @@
         "id": "demo-flow",
         "task_id": "demo-flow",
         "key": "demo-flow",
-        "title": "Share the agreed demo flow",
-        "label": "Share the agreed demo flow",
-        "action": "Review the proposed story and send it to the rep.",
-        "short_action": "Review the proposed story and send it to the rep.",
-        "why": "Review the proposed story and send it to the rep.",
+        "title": "Northstar Labs \u00b7 Answer Morgan\u2019s login question",
+        "label": "Reply to Morgan in Slack.",
+        "action": "Review the answer and reply to Morgan in Slack.",
+        "short_action": "Reply to Morgan in Slack.",
+        "why": "Morgan asked how contractors would sign in before the next demo.",
         "owner": "Demo user",
         "status": "open",
         "waiting": false,
@@ -276,7 +373,7 @@
         "checkpoints": [],
         "waiting_on": [],
         "dependencies": [],
-        "recipient_name": "Demo rep"
+        "recipient_name": "Morgan Lee"
       },
       {
         "id": "demo-resources",
@@ -303,6 +400,38 @@
         "checkpoints": [],
         "waiting_on": [],
         "dependencies": []
+      },
+      {
+        "id": "demo-intro",
+        "task_id": "demo-intro",
+        "key": "demo-intro",
+        "title": "New deal \u00b7 Check in with Avery",
+        "label": "Check in with Avery",
+        "action": "Slack Avery about the new deal.",
+        "short_action": "Slack Avery about the new deal.",
+        "why": "You were assigned to a new deal.",
+        "owner": "Demo user",
+        "status": "open",
+        "waiting": false,
+        "added_at": "2026-11-02T15:00:00Z",
+        "added_basis": "Fictional demonstration",
+        "due_at": "2026-11-03",
+        "due_label": "Due",
+        "due_basis": "Fictional deadline",
+        "done_when": "Review and share the prepared response",
+        "external_view": "first-touchpoints",
+        "rank": 1,
+        "checks": [],
+        "milestones": [],
+        "checkpoints": [],
+        "waiting_on": [],
+        "dependencies": [],
+        "recipient_name": "Avery Chen",
+        "intake": {
+          "ae": "Avery Chen",
+          "name": "Cedar Harbor Labs",
+          "classification": "outreach_to_confirm"
+        }
       }
     ],
     "deal_work": [
@@ -310,11 +439,11 @@
         "id": "demo-flow",
         "task_id": "demo-flow",
         "key": "demo-flow",
-        "title": "Share the agreed demo flow",
-        "label": "Share the agreed demo flow",
-        "action": "Review the proposed story and send it to the rep.",
-        "short_action": "Review the proposed story and send it to the rep.",
-        "why": "Review the proposed story and send it to the rep.",
+        "title": "Northstar Labs \u00b7 Answer Morgan\u2019s login question",
+        "label": "Reply to Morgan in Slack.",
+        "action": "Review the answer and reply to Morgan in Slack.",
+        "short_action": "Reply to Morgan in Slack.",
+        "why": "Morgan asked how contractors would sign in before the next demo.",
         "owner": "Demo user",
         "status": "open",
         "waiting": false,
@@ -331,7 +460,7 @@
         "checkpoints": [],
         "waiting_on": [],
         "dependencies": [],
-        "recipient_name": "Demo rep"
+        "recipient_name": "Morgan Lee"
       },
       {
         "id": "demo-resources",
@@ -360,7 +489,40 @@
         "dependencies": []
       }
     ],
-    "first_touchpoints": [],
+    "first_touchpoints": [
+      {
+        "id": "demo-intro",
+        "task_id": "demo-intro",
+        "key": "demo-intro",
+        "title": "New deal \u00b7 Check in with Avery",
+        "label": "Check in with Avery",
+        "action": "Slack Avery about the new deal.",
+        "short_action": "Slack Avery about the new deal.",
+        "why": "You were assigned to a new deal.",
+        "owner": "Demo user",
+        "status": "open",
+        "waiting": false,
+        "added_at": "2026-11-02T15:00:00Z",
+        "added_basis": "Fictional demonstration",
+        "due_at": "2026-11-03",
+        "due_label": "Due",
+        "due_basis": "Fictional deadline",
+        "done_when": "Review and share the prepared response",
+        "external_view": "first-touchpoints",
+        "rank": 1,
+        "checks": [],
+        "milestones": [],
+        "checkpoints": [],
+        "waiting_on": [],
+        "dependencies": [],
+        "recipient_name": "Avery Chen",
+        "intake": {
+          "ae": "Avery Chen",
+          "name": "Cedar Harbor Labs",
+          "classification": "outreach_to_confirm"
+        }
+      }
+    ],
     "internal": [
       {
         "id": "demo-review",
@@ -402,7 +564,7 @@
     "date_basis": "Demo only"
   },
   "snapshot": {
-    "month": "Demo month",
+    "month": "2026-11",
     "metrics": {
       "calls": {
         "external": 42,
@@ -414,10 +576,95 @@
         "actual": 18500,
         "goal": 15000,
         "currency": "USD",
-        "led_wins": 3,
-        "assisted_wins": 2,
+        "led_wins": 2,
+        "assisted_wins": 1,
         "as_of": "2026-11-03T13:00:00Z",
-        "basis": "Fictional demonstration"
+        "basis": "Fictional demonstration",
+        "month": "2026-11",
+        "full_month_goal": 25000,
+        "full_month_attainment_display": "74%",
+        "deals": [
+          {
+            "id": "1",
+            "name": "Harbor House",
+            "tier": "Led",
+            "amount": 6200
+          },
+          {
+            "id": "2",
+            "name": "Juniper Systems",
+            "tier": "Led",
+            "amount": 4800
+          },
+          {
+            "id": "3",
+            "name": "Pine Works",
+            "tier": "Assisted",
+            "amount": 3900
+          },
+          {
+            "id": "4",
+            "name": "Westport",
+            "tier": "Supported",
+            "amount": 3600
+          }
+        ],
+        "components": {
+          "rows": [
+            [
+              {
+                "display": "Influenced MRR"
+              },
+              {
+                "display": "$18.5K"
+              },
+              {
+                "display": ""
+              },
+              {
+                "display": ""
+              },
+              {
+                "display": "123%"
+              },
+              {
+                "display": "$25K"
+              },
+              {
+                "display": ""
+              },
+              {
+                "display": "74%"
+              }
+            ],
+            [
+              {
+                "display": "Led + Assisted"
+              },
+              {
+                "display": "$14.9K"
+              },
+              {
+                "display": ""
+              },
+              {
+                "display": ""
+              },
+              {
+                "display": "124%"
+              },
+              {
+                "display": "$20K"
+              },
+              {
+                "display": ""
+              },
+              {
+                "display": "75%"
+              }
+            ]
+          ]
+        }
       },
       "upcoming": {},
       "roster": {
@@ -434,7 +681,23 @@
         "source_updated": "2026-11-03T13:00:00Z"
       }
     ],
-    "feed": []
+    "feed": [],
+    "scorecard_history": {
+      "months": {
+        "2026-10": {
+          "month": "2026-10",
+          "actual": 16300,
+          "full_month_goal": 25000,
+          "full_month_attainment_display": "65%"
+        },
+        "2026-09": {
+          "month": "2026-09",
+          "actual": 14200,
+          "full_month_goal": 25000,
+          "full_month_attainment_display": "57%"
+        }
+      }
+    }
   },
   "weekly_suggestions": {
     "items": []
@@ -488,27 +751,34 @@
         "kind": "Requested \u00b7 fictional example",
         "requests": [
           {
-            "person": "Demo rep \u00b7 fictional",
-            "date": "Example date",
-            "quote": "Can you send me the proposed demo flow before our prep?",
-            "basis": "Synthetic example, not a real request"
+            "person": "Morgan Lee",
+            "date": "Nov 2",
+            "quote": "Can you look into how our contractors would sign in before Thursday?",
+            "url": "https://example.com/messages/morgan/1"
           }
         ],
-        "recommended_answer": "Use the existing outcome-first flow: rep workspace, activity capture, then manager visibility. Confirm those are the outcomes the team wants to validate.",
-        "needed_from_you": "Approve or adjust the proposed flow and share it through your authorized channel.",
-        "trigger": "The fictional rep asked for the proposed flow before the next prep.",
-        "people": "Demo rep is a fictional sales counterpart.",
-        "facts": [
-          "The proposed sequence is prepared; no demonstration or customer acceptance is claimed."
-        ],
-        "action": "Review the proposed story and send it to the rep.",
+        "recommended_answer": "Hey Morgan, I\u2019d start with SSO through your existing identity provider. Can you send me which IdP the contractors use so I can confirm the right setup?",
+        "needed_from_you": "Review the short draft, then send it in the original Slack thread.",
+        "trigger": "Morgan asked how contractors would sign in before the next demo.",
+        "people": "Morgan Lee \u00b7 sales rep",
+        "facts": [],
+        "action": "Reply to Morgan in Slack.",
         "done_when": "The reviewed flow reaches the rep through a verified, authorized send.",
-        "caveats": "Fictional preview only. No real account or customer is connected.",
         "sources": [
           {
             "label": "Fictional example packet"
           }
-        ]
+        ],
+        "communication_action": {
+          "person": "Morgan Lee",
+          "destination": "Slack",
+          "url": "https://example.com/messages/morgan/1"
+        }
+      },
+      "demo-intro": {
+        "kind": "Assigned",
+        "trigger": "New SE assignment to Cedar Harbor Labs.",
+        "recommended_answer": "Ask Avery where SE help would be useful."
       }
     }
   }

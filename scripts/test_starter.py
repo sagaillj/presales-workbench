@@ -76,6 +76,21 @@ class StarterTests(unittest.TestCase):
         store.setup({'action':'preview_seen'});p=store.setup({'action':'sources','sources':['email','hex']})['profile']
         self.assertEqual(p['read_requests']['email']['status'],'awaiting_chat_approval');self.assertEqual(p['read_requests']['slack']['status'],'skipped');self.assertEqual(p['sources'],{})
         self.assertIn('ask me to approve',app.onboarding.handoff(p))
+    def test_voice_scope_is_optional_private_and_limited_to_selected_months(self):
+        store=app.Store(self.root,'demo')
+        p=store.setup(dict(self.answers(),writing_style='Short Slack; warm email',voice_lookback_months=6))['profile']
+        self.assertEqual(p['preferences']['writing_voice']['state'],'not_sampled')
+        self.assertEqual(p['preferences']['writing_voice']['user_notes'],'Short Slack; warm email')
+        store.setup({'action':'preview_seen'})
+        p=store.setup({'action':'sources','sources':['writing_voice']})['profile']
+        self.assertIn('last 6 months',p['read_requests']['writing_voice']['scope'])
+        self.assertEqual(p['read_requests']['writing_voice']['status'],'awaiting_chat_approval')
+        self.assertEqual(p['sources'],{})
+        self.assertIn('workspace/voice-profile.json',app.onboarding.handoff(p))
+        self.assertTrue(all(v is False for v in p['permissions'].values()))
+        for value in [0,12,'6',True]:
+            with self.assertRaises(ValueError):store.setup(dict(self.answers(),voice_lookback_months=value))
+
     def test_setup_rejects_unsupported_grants_bad_inputs_and_identity_conflicts(self):
         store=app.Store(self.root,'demo')
         for extra in [{'permissions':{'send_messages':True}},{'identity':{'verified':True}},{'sources':{'email':True}},{'timezone':'Invalid/Zone'},{'email':'not-an-email'},{'modules':{'daily_closeout':True}}]:

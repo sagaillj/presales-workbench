@@ -76,6 +76,21 @@
       "demo_prep": true,
       "weekly_qci": true,
       "scorecard": true
+    },
+    "writing_voice": {
+      "user_notes": null,
+      "lookback_months": 3,
+      "state": "not_sampled",
+      "profile_path": null
+    },
+    "call_capture": {
+      "provider": "unknown",
+      "state": "not_verified"
+    },
+    "product_feedback": {
+      "cadence_weeks": 1,
+      "mode": "ask",
+      "automatic_submission": false
     }
   },
   "onboarding": {

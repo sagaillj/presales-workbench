@@ -13,3 +13,9 @@ The two automation files are prompts and proposed cadence, not installed jobs. P
 The built-in exporter uses an allowlist. It excludes workspace/, live records, profiles, source transcripts, tokens, cookies, browser profiles, logs, personal evidence and unrecognized root files. Keep reusable workflow source in the shared internal repository and keep each user’s workspace private.
 
 Guided setup: /setup stores local preferences through app/onboarding.py. The same validation is available via workbench.py configure. /?mode=demo and /?mode=personal select separate local stores on the same server. The form never connects sources. read_requests are proposals awaiting chat approval, not authentication. The assistant verifies facts and records actual approved read scope.
+
+## Product feedback and updates
+
+Feedback state is separate from task progress. The UI never submits on page load or when choosing a score. Explicit Submit sends only the schema-limited feedback payload through the local Python server to the fixed maintainer collector. The collector creates a Google Form response and returns a read-back receipt; the linked Sheet stays private. Unknown outcomes remain pending and retry the same idempotency reference. The prefilled Google Form is a separate, user-submitted fallback. No credentials from the operator are bundled or extracted, and no CRM transport is added.
+
+The open app can check public GitHub release metadata once a day. Users can disable the check. It never downloads or executes new code. Upgrades are guided and preserve workspace data and reviewed local customizations.
