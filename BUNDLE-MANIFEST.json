@@ -1,5 +1,5 @@
 {
-  "release": "0.5.0",
+  "release": "0.5.1",
   "files": {
     ".agents/skills/presales-daily-closeout/SKILL.md": {
       "sha256": "6fd3ffbf1ad0b21e5e8724568fab7f06d1ad78f6d9bfff5e0e3a0cfcda98fcc4",
@@ -54,7 +54,7 @@
       "bytes": 497
     },
     "PACKAGE-REPORT.json": {
-      "sha256": "cf62a72a52401bb6c686f3cb53848ea813867016bde6e418845fec27dc813cfe",
+      "sha256": "4886bc7090771a53373f200767700df047b3a92b653a9421afd89705c800c938",
       "bytes": 8223
     },
     "README.md": {
@@ -62,15 +62,15 @@
       "bytes": 6716
     },
     "RELEASE-NOTES.md": {
-      "sha256": "d5a09ea5c905ad509cd03ce1f3d3295adeb7de04167b71c1c1d4cdeccfa15a14",
-      "bytes": 1951
+      "sha256": "9ab7f64459ea7ecbd8d5dae3bc72bfc63c901cc9e5d4747e62e5b1c3aa90fccd",
+      "bytes": 343
     },
     "SETUP-PROMPT.txt": {
       "sha256": "4f7e621eb4be33519f2f00a700a686b7f252a8f9106d508cf6bfabbe58f2e4e5",
       "bytes": 1195
     },
     "START-HERE.html": {
-      "sha256": "eaefa72b1cf078f0dc166262f647214dd1458061e9ea9272f0fb22c60538342a",
+      "sha256": "bd48362ced16399d1a339d6ad6caaca34ae2546dcfbce6d26fe782f59cfbf07f",
       "bytes": 2215
     },
     "Start Workbench.cmd": {
@@ -82,7 +82,7 @@
       "bytes": 250
     },
     "VERSION": {
-      "sha256": "a0ad50640139a524f86591157145bf1d4674ea9c065bfea21558f0f7b04430c8",
+      "sha256": "aba951626c8690ce493cbc8f018205bb468003f61fbf00fd3d3c71cebabc0177",
       "bytes": 6
     },
     "app/appearance.js": {
@@ -142,8 +142,8 @@
       "bytes": 18699
     },
     "app/insight-views.js": {
-      "sha256": "350f8dfda6d26bd0ce47e6e1b2af03c11f4ffcdbb316e9434b11dd3346d7eda3",
-      "bytes": 12062
+      "sha256": "ebe34e51e565a8dea71cdc71879172a14260c4cdaf9c8934ebd8f7d6e49828cc",
+      "bytes": 12087
     },
     "app/onboarding.py": {
       "sha256": "4c3dacfec8e9d0cf466485dd581b14ee4ee6ffbc98e06c342f95c95f1283ddda",
@@ -166,7 +166,7 @@
       "bytes": 12893
     },
     "app/product_feedback.py": {
-      "sha256": "2b838c8af50ac6412f3c743fabd3a2bb6325d66857a0c3719ceff4b2501bb52f",
+      "sha256": "5063227d5b186bd3d42be3ceeaa2420d60fc7a4fafe6612c9cb21c6c104edde0",
       "bytes": 16402
     },
     "app/reply-cards.css": {
@@ -286,8 +286,8 @@
       "bytes": 2421
     },
     "scripts/test_insight_views.cjs": {
-      "sha256": "d180c0293039f75b6edf249fbf3697bb28aeb7c70c7840574a009ed979bc680b",
-      "bytes": 2323
+      "sha256": "5626c2adad22959eba4705441f08e162c664a1a2b2b4ca90b36efb67f65afa5a",
+      "bytes": 2810
     },
     "scripts/test_product_feedback.py": {
       "sha256": "220da51c2be4d40237fb0bb1213c7a57c1a1c1027ab21d25181e0cb7b38fa99f",

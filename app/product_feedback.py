@@ -18,7 +18,7 @@ import urllib.request
 import uuid
 REPOSITORY='sagaillj/presales-workbench'
 LATEST='https://github.com/'+REPOSITORY+'/releases/latest'
-VERSION='0.5.0'
+VERSION='0.5.1'
 _LOCK=threading.RLock()
 DONE={'submitted_verified','submitted_user_reported','sent_user_reported','skipped'}
 def now_at(now=None,zone='UTC'):
