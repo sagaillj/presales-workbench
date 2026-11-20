@@ -10,3 +10,5 @@ Read ../../../docs/DAILY-CLOSEOUT.md. For held calls and CRM maintenance read ..
 Check workspace/profile.json preferences.modules before running this workflow. Respect opt-outs and source-read approvals from onboarding; a selected workflow is not source access or write permission.
 
 When presenting an action, follow ../../../docs/ACTION-CARDS.md: question/request first, short recommended answer, optional context and unsent replies. Preserve settled decisions and user progress.
+
+Daily local software updates: follow docs/UPGRADING.md (skills: ../../../docs/UPGRADING.md). Keep Workbench automatically up to date defaults ON, with a Settings opt-out. Run scripts/check_updates.py during the existing daily review and complete its verified download, stop-only-this-app, install-staged, restart and readback workflow in the same run. Preserve disabled checks, local changes and all private workspace data. Stop for conflicts or unmanaged installs. This local software-update preference grants no source access, sends or CRM/calendar actions and creates no new schedule.

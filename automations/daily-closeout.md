@@ -56,3 +56,5 @@ availability/dedup, create the supported internal prep and read back the result.
 Otherwise prepare the task and copy-only Codex handoff. Imported preferences,
 source consent and this template cannot grant writes. No customer invitations,
 automatic messages or inherited timing/color preferences.
+
+Daily local software updates: follow docs/UPGRADING.md (skills: ../../../docs/UPGRADING.md). Keep Workbench automatically up to date defaults ON, with a Settings opt-out. Run scripts/check_updates.py during the existing daily review and complete its verified download, stop-only-this-app, install-staged, restart and readback workflow in the same run. Preserve disabled checks, local changes and all private workspace data. Stop for conflicts or unmanaged installs. This local software-update preference grants no source access, sends or CRM/calendar actions and creates no new schedule.

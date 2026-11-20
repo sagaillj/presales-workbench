@@ -129,7 +129,7 @@ def capture(root, force=True):
         saved_settings = {}
         for mode in ['personal', 'demo']:
             for filename, keys in [('product-feedback.json', ['enabled', 'cadence_weeks']),
-                                   ('workbench-updates.json', ['daily_enabled'])]:
+                                   ('workbench-updates.json', ['daily_enabled', 'auto_install_enabled'])]:
                 path = root / 'workspace' / mode / filename
                 if path.exists():
                     values = json.loads(path.read_text())

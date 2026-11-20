@@ -1,4 +1,4 @@
-"""Public GitHub metadata checks and a version-specific local approval queue."""
+"""Daily GitHub checks, automatic-update preference and a version-pinned queue."""
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import threading
@@ -12,19 +12,25 @@ def _due(stamp,now):
     try:return now-datetime.fromisoformat(stamp.replace('Z','+00:00'))>=timedelta(days=1)
     except (ValueError,TypeError,AttributeError):return True
 
-def state(folder, *, force=False, now=None, fetch=None, installed=None):
+def state(folder, *, force=False, now=None, fetch=None, installed=None, root=None):
     folder=Path(folder);now=_now(now)
     with _LOCK:
         saved=feedback.read(folder/FILE,{'daily_enabled':True})
-        if force or (saved.get('daily_enabled',True) and _due(saved.get('checked_at'),now)):
+        if force or (checks_enabled(saved,root) and _due(saved.get('checked_at'),now)):
             result=feedback.release_status(installed=installed,fetch=fetch)
             saved.update(result=result,checked_at=now.isoformat())
             feedback.write(folder/FILE,saved)
-        return public(saved)
+        return public(saved,root)
 
-def public(saved):
+def checks_enabled(saved,root=None):
+    root=Path(root or Path(__file__).resolve().parents[1])
+    profile=feedback.read(root/'workspace/profile.json',{})
+    features=profile.get('preferences',{}).get('automatic_features',{}).get('features',{})
+    return saved.get('daily_enabled',True) and features.get('workbench_update_checks',True)
+
+def public(saved,root=None):
     result=dict(saved.get('result') or {'status':'not_checked','available':False,'url':feedback.LATEST})
-    return {**result,'checked_at':saved.get('checked_at'),'daily_enabled':saved.get('daily_enabled',True),'approval':saved.get('approval')}
+    return {**result,'checked_at':saved.get('checked_at'),'daily_enabled':checks_enabled(saved,root),'auto_install_enabled':saved.get('auto_install_enabled',True),'approval':saved.get('approval')}
 
 def update(folder,body,*,now=None,fetch=None,installed=None):
     if not isinstance(body,dict):raise ValueError('Expected update action')
@@ -32,9 +38,10 @@ def update(folder,body,*,now=None,fetch=None,installed=None):
     with _LOCK:
         if action=='check':return state(folder,force=True,now=now,fetch=fetch,installed=installed)
         saved=feedback.read(folder/FILE,{'daily_enabled':True});result=saved.get('result',{})
-        if action=='daily_enabled':
+        if action in {'daily_enabled','auto_install_enabled'}:
             if not isinstance(body.get('enabled'),bool):raise ValueError('Expected enabled true or false')
-            saved['daily_enabled']=body['enabled']
+            saved[action]=body['enabled']
+            if not body['enabled'] and (saved.get('approval') or {}).get('automatic') and saved['approval']['status']!='running':saved['approval']=None
         elif action=='approve':
             if result.get('status')!='checked' or not result.get('available') or result.get('latest')!=body.get('version'):raise ValueError('That release is no longer available. Check for updates first.')
             feedback.version_tuple(result['latest'])

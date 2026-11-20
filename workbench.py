@@ -25,6 +25,7 @@ import orientation
 from compensation import catalog_payload, preset_from_verified_profile
 import product_feedback
 import workbench_updates
+import runtime_lock
 from time_savings import savings_summary
 if (ROOT/'VERSION').exists():
     product_feedback.VERSION=(ROOT/'VERSION').read_text().strip()
@@ -345,7 +346,8 @@ def main():
     server=ThreadingHTTPServer(('127.0.0.1',getattr(args,'port',8781)),Handler);server.store=store
     url=f'http://127.0.0.1:{server.server_address[1]}';print('Workbench '+url,flush=True)
     if getattr(args,'open',False):webbrowser.open(url+'/?mode='+store.mode)
-    try:server.serve_forever()
+    try:
+        with runtime_lock.exclusive(ROOT/'workspace/.app-runtime.lock'):server.serve_forever()
     except KeyboardInterrupt:pass
     finally:server.server_close()
 if __name__=='__main__':main()

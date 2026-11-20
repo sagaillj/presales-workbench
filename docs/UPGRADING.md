@@ -14,23 +14,39 @@ access, installs schedules or sends anything. Restart the existing Workbench and
 verify your version, progress and a request-first card. For a first install use
 the normal onboarding instead. Keep the prior ZIP for rollback.
 
-Workbench checks public GitHub release metadata once a day while open and during
-the existing daily workflow. Turn daily checks off in Settings if you prefer.
-A newer stable release appears as one **Workbench update** card in Internal work.
-Choose **Approve update** to queue exactly that version for the next workflow, or
-**Copy prompt** to ask your assistant to update now. You can cancel a queued
-approval. The card shows any preflight blocker rather than silently replacing
-locally edited app files. No private data is uploaded by the check.
+## Daily automatic updates
 
-The daily workflow runs `python3 scripts/check_updates.py` and reads the queued
-approval. Only a queued approval authorizes installing that exact release. Verify
-its fixed GitHub release identity, checksum and bundle manifest, back up, use the
-existing upgrade helper, restart, and check version plus preserved progress. Use
-`--outcome installed --version X.Y.Z --detail "verified checks"` only after those
-checks succeed. Record `--outcome blocked` with an exact reason for local app edits,
-unmanaged installs or other preflight failures. This grants no new source access,
-external writes or schedules. A local development checkout must never be replaced
-with a generic starter installation.
+Automatic updates are ON by default. During the existing daily review,
+`python3 scripts/check_updates.py` checks the fixed public GitHub release channel
+at most daily, downloads a newer stable release, verifies its checksum, version,
+complete manifest and safe ZIP paths, and queues that exact release. No newer
+version means no download or Internal work card. A network failure leaves the
+current installation in place. No separate schedule is created.
+
+When the command returns `workflow_action`, the assistant completes the update
+in the SAME daily review without requesting another version approval: stop only
+this installation's verified server, run `python3 scripts/check_updates.py
+--install-staged`, restart on the existing local URL, and verify VERSION plus saved
+progress. The installer refuses a running app, unmanaged installation or development
+checkout. It uses the local change journal, conflict preflight, backup and rollback
+helper above. Overlapping edits or failed checks leave one Internal work update
+card with the exact blocker. Resolve the blocker and retry; never overwrite edits.
+An installed receipt records file verification, not proof of restart or UI readback.
+
+Uncheck **Keep Workbench automatically up to date** in Settings to require
+**Approve update** on the single Internal work card instead. This still checks
+GitHub daily but does not download or install without that version approval.
+Turning off automatic release checks also prevents unattended downloads/installs;
+manual Check for updates and exact-version approval remain available.
+Previously disabled daily checks stay disabled. Preferences and the entire private
+workspace, including local customizations, source approvals, schedules and progress,
+are preserved. Update preference changes grant no source access or external actions.
+
+`--check-only` reads metadata only. `--force` refreshes metadata rather than waiting
+for its cache. Legacy `--outcome` reporting remains supported, with exact VERSION
+readback required for installed. Older installations need one normal upgrade to
+this release before its automatic update behavior can run. Never replace a private
+development checkout with the generic starter.
 
 The private workspace also holds product feedback and writing preferences. These
 stay in place during the upgrade. Verify the downloaded checksum against the

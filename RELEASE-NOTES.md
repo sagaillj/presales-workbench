@@ -1,8 +1,7 @@
-# Workbench v0.7.0
+# Workbench v0.8.0
 
-- Settings is clearly labeled and includes automatic-feature controls. New-user external actions start off; preferences never grant access or permission.
-- The first NPS check-in stays hidden until ten distinct days of local use. Weekly or biweekly follow-ups remain optional.
-- Chat onboarding discovers installed recording/transcription candidates, including Fellow, Granola and Wispr Flow, and checks available connectors. It asks how calls are captured when discovery is inconclusive and recommends current approved options when needed.
-- Users can ask to include other sources, such as Asana, Fellow or another app. Settings records the request; setup verifies capability and agrees access first.
-- Private workspace/LOCAL-CHANGES.md captures app/workflow changes and preferences. Updates preserve the workspace, reapply compatible edits across successive releases, and retain conflicts for review. Older installs can supply a verified original-release baseline.
-- No personal source data, existing users’ permissions, credentials or active schedules are distributed.
+- Keep Workbench automatically up to date is on by default, with a Settings opt-out.
+- The existing daily review checks GitHub, downloads and verifies a newer stable release, and completes installation and restart without per-version approval. Current installations stay quiet.
+- Preserve private workspace and local customizations with conflict preflight, backups and rollback. Refuse running-app installation and unmanaged development checkouts.
+- Turning automatic updates off keeps one Internal work update card for individual approval; existing disabled daily checks stay disabled. No new schedules, source access or external action grants.
+- Existing installations need one upgrade to v0.8.0 to receive automatic updating.
