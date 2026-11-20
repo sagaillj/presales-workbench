@@ -41,3 +41,14 @@ Capture one stable booking task when genuinely missing, or a precise source gap
 when coverage is incomplete. Automatic internal prep booking is off by default;
 only the saved enabled preference plus this user's explicit calendar authority
 allows native creation after live availability/dedup checks and exact readback.
+# User settings and additional sources
+
+Read `workspace/profile.json` preferences, including `automatic_features`, before
+each existing review. Honor off switches, current modules and approved source
+scope. Outside-world actions default off for new users. An enabled preference is
+not approval, a connector installation or a native schedule. If the user requests
+other sources, such as Asana or Fellow, check actual capability and agree the read
+scope before adding them. Capture app/workflow edits with
+`python3 workbench.py capture-changes`; keep the private Markdown journal out of
+shared material.
+

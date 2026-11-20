@@ -1,5 +1,5 @@
 {
-  "release": "0.6.0",
+  "release": "0.7.0",
   "files": {
     ".agents/skills/presales-daily-closeout/SKILL.md": {
       "sha256": "6fd3ffbf1ad0b21e5e8724568fab7f06d1ad78f6d9bfff5e0e3a0cfcda98fcc4",
@@ -46,32 +46,32 @@
       "bytes": 71
     },
     "AGENTS.md": {
-      "sha256": "6b16c4d9e4e669cf19554eb88f9ded72cc5046fb91e0e11ac86ae9bb5507b691",
-      "bytes": 4839
+      "sha256": "e59271925ef512e9bad3bdceab8d5a978fb3beb6de1a2307e15ac487bd9c4dd4",
+      "bytes": 5407
     },
     "CLAUDE.md": {
       "sha256": "d5b6ebd1266886093726d02b3655777f28ada27cd4eaaaf890d67d415c7f8ea8",
       "bytes": 497
     },
     "PACKAGE-REPORT.json": {
-      "sha256": "4763e0e26263b390cd40ecb4a686e214d59360ccfecf53a79cdd278a68980344",
-      "bytes": 11961
+      "sha256": "066e74085d56f33de18f915cc8389649646c10dfc5c2bd0065ce53c9d99e49be",
+      "bytes": 12669
     },
     "README.md": {
       "sha256": "0ead93211e558656359cf0627ea63e47f5f28b5a3ce507fe58680d70e269d814",
       "bytes": 7941
     },
     "RELEASE-NOTES.md": {
-      "sha256": "9c0c36b5d0065a90c87e229666a4b4c072053d679736977ee80b79c3e3853feb",
-      "bytes": 1391
+      "sha256": "9cf679ea31a8aaf5d3b7f0e2b6b9683e71953109ed55dcf862bc7eb45f619f99",
+      "bytes": 1095
     },
     "SETUP-PROMPT.txt": {
-      "sha256": "e7f779e74d0846b9e49d0381adb8e144b9f10e53863e34bfc0f0a3b707012f0c",
-      "bytes": 1672
+      "sha256": "49cf68601e9c283a299caf00cfce072b1a7914f66943ea1cb16b1d5afe2982d0",
+      "bytes": 2339
     },
     "START-HERE.html": {
-      "sha256": "5841d3051d1f703d5b1f67636dd6aaff9487c0aeb8a8be2a0a85a4fd40bee8e9",
-      "bytes": 3959
+      "sha256": "87e8368a16bd8890c94a12b34d1c3c0d56d35c9e75e0cefe05dbaca9c926514b",
+      "bytes": 4631
     },
     "START-HERE.txt": {
       "sha256": "65aa42a71ce9532ce333c755444d125987132225e964b9ed7f66c5500753faff",
@@ -86,7 +86,7 @@
       "bytes": 250
     },
     "VERSION": {
-      "sha256": "97a5d6e540a6120d09c39ddb667e0e8e2bac7fcc2ffef813b82e08fd60365bce",
+      "sha256": "967d9afb101346667166f2e76e81910bc190488d7d41d50ca0072e9d92f00e32",
       "bytes": 6
     },
     "app/THIRD-PARTY-NOTICES.txt": {
@@ -97,9 +97,21 @@
       "sha256": "8b3e117e58e9cc839b31bc2f0b13dadbac5e3dc7546c87630fc07e0abe56400f",
       "bytes": 6201
     },
+    "app/automation-settings.css": {
+      "sha256": "5c394e5e192ae7ac191926889aabd9e8a0e09a0acd88de262db85486911c94dd",
+      "bytes": 4915
+    },
+    "app/automation-settings.js": {
+      "sha256": "ff7c12e7674b5eef21d40a6e2aee2771bb77de5d0e93d803aeadc363d54f2278",
+      "bytes": 7645
+    },
     "app/automation_costs.py": {
       "sha256": "c122a5fba90d34b4c0752b4f9435fdcf0cdd0ce25b7a2b9dde078d988717096c",
       "bytes": 4565
+    },
+    "app/automation_preferences.py": {
+      "sha256": "eab92da25c15d5e703fdc9084b77c92a7302f651e2191db1156a5c190b5ec783",
+      "bytes": 8599
     },
     "app/branding/gmail-icon.svg": {
       "sha256": "826033bfe7bbec90f2beb0ddd5e9f7e65b8469b960cb5272379e93669dfdb631",
@@ -136,6 +148,10 @@
     "app/cadence-settings.js": {
       "sha256": "bb563472adddb782f93f136ae290d6f320f74bb6950582f87f4bc77a732133bd",
       "bytes": 8436
+    },
+    "app/call_capture.py": {
+      "sha256": "516389665a39c533486ac4ebe7a3f6c6e9c6b56a0244facdf3aa27461f78a0a7",
+      "bytes": 2396
     },
     "app/card-order.js": {
       "sha256": "5e59b7e4d3a12d5ec451d37055776b3cdaf5daaaaea69601be54ef02c4474512",
@@ -182,8 +198,8 @@
       "bytes": 39854
     },
     "app/index.html": {
-      "sha256": "ce3bab0a5eeff24d035d601fa7e4012ed3483fc453d2a417efc60dd3c12bfb24",
-      "bytes": 140051
+      "sha256": "82b1146d98ef5d5105ba4d7ce7b7a410063b5fb6a7f8960e3e8a6e8bad6f98e0",
+      "bytes": 141132
     },
     "app/insight-views.css": {
       "sha256": "bca9a9841cab4425ae520a2f6aee1d9e86989f80ea90eafd51f2d5a3ac2d7a79",
@@ -192,6 +208,14 @@
     "app/insight-views.js": {
       "sha256": "049e13f642960b9b8efad9c5d87d925ebec788e297daf1d094269802c9245cd4",
       "bytes": 9058
+    },
+    "app/local-changes.js": {
+      "sha256": "218ee3bf3e307253219a3b2f01e2221184c0587017412c1f0300c18d9d8e3b84",
+      "bytes": 2303
+    },
+    "app/local_changes.py": {
+      "sha256": "987b6b80f3e8859d7c23f36f069c3ce7964788b7311a6b19b2236dbdf0f0ae85",
+      "bytes": 9595
     },
     "app/metrics-focus.css": {
       "sha256": "b52620b1b42a3d146d45cfb4b092d21971d29aca8d1582d3bcb775cf6eab18eb",
@@ -202,8 +226,8 @@
       "bytes": 51288
     },
     "app/onboarding.py": {
-      "sha256": "eb359a5af241bff94ba83bcd72bbac722452fdfd19d61a5622eb75b42df197c9",
-      "bytes": 18721
+      "sha256": "aeea333275d98944972f9109e91c3855af6e64c8c74e2a4a7353efbe9bba0f4b",
+      "bytes": 20068
     },
     "app/orientation.py": {
       "sha256": "afb802f7ff164970e885508833f74ec1075cf53a313b008ed63fd95392ab0fd7",
@@ -222,12 +246,12 @@
       "bytes": 3204
     },
     "app/product-feedback.js": {
-      "sha256": "d0cfcb2f99b9b38888bbc4d0b0f6fda3d58b160106ea347318987c8db3c7e0fa",
-      "bytes": 11146
+      "sha256": "e7c43562b8948d1fe1ebb587975ba6903b785e777b235cf99e37aeefa7e6f94b",
+      "bytes": 11367
     },
     "app/product_feedback.py": {
-      "sha256": "540838c9f83fa17fec9606a3f716b3f818719115054a4b36970459bebc0b8ac1",
-      "bytes": 16830
+      "sha256": "267a0a8d5570ec88897f576b975e7301bf4b0207de7f29b437d001853593f07e",
+      "bytes": 17597
     },
     "app/reply-cards.css": {
       "sha256": "b858e031b266c385d365bba8ba92c5be0684a663752f8322c4f4267aacd13c62",
@@ -290,16 +314,16 @@
       "bytes": 3394
     },
     "docs/CALL-HYGIENE.md": {
-      "sha256": "cdabee990832a617289a6fb4c5df253662d6654beed036e3c73a493b2fede931",
-      "bytes": 3403
+      "sha256": "5c2a6768b0e9c403a5d49976a62638b689d84f451cb2643eb7c774b10258c8af",
+      "bytes": 3921
     },
     "docs/CONTRIBUTING.md": {
       "sha256": "5abad371a29f79b2ceec9a7f8d966af694ad047cf471b12ce9e51902dc868dc8",
       "bytes": 1183
     },
     "docs/DAILY-CLOSEOUT.md": {
-      "sha256": "4d31ec7d701d9b117e96a4bc1ed3a69a13c49dbde990658b4aa5f1920b364e0f",
-      "bytes": 7932
+      "sha256": "3308b609fabfc08684634f659edef8e50f4071fa9f48efc20179ec01a115f553",
+      "bytes": 8535
     },
     "docs/DATA-CONTRACT.md": {
       "sha256": "1719734c6e34822529a6a6278b182f5684b81ed69a89079b739a1a6746f86bd8",
@@ -310,16 +334,16 @@
       "bytes": 6615
     },
     "docs/FEEDBACK.md": {
-      "sha256": "dd798c7e59679f12b5fdc0165060fd85dd7798d6b2138ed5ca58ad0a8e3b2965",
-      "bytes": 2641
+      "sha256": "9952babe453da50e56e788c75bedcee35d473162069ca3a3eb31055db2ab9ecd",
+      "bytes": 3064
     },
     "docs/FIRST-TEST.md": {
       "sha256": "dcedd45cd24833d20f88e79c30c838978bd9746d277995550b3e8cd796a6dbf2",
       "bytes": 3915
     },
     "docs/ONBOARDING.md": {
-      "sha256": "aca529f1a9f2c79b2e70a3b764d63300db8872fcc44b6dbb94a1493134c41c31",
-      "bytes": 14967
+      "sha256": "fc96bebf69209f8ff9583e72e46a5badf71f8c274334041e568e981c3c80fe59",
+      "bytes": 17038
     },
     "docs/QCI.md": {
       "sha256": "46a5852aba0ceff2dda2eabd6c3334486558fe9c5a530b80e6789bccdd50b243",
@@ -338,8 +362,8 @@
       "bytes": 1192
     },
     "docs/UPGRADING.md": {
-      "sha256": "e6984425a4023154ebd200d492dd7d2f832dcca519c939bb266c95b860b0b262",
-      "bytes": 2319
+      "sha256": "cc86cae55d65a7296258ab7ac5315954185e619ed4752011aa72eaab11325e0b",
+      "bytes": 3864
     },
     "examples/demo-state.json": {
       "sha256": "879e0bb0db34e54e551c28b40c24269a6e7cb065c101b1d4b45b3b14c644f561",
@@ -426,8 +450,8 @@
       "bytes": 29274
     },
     "scripts/test_product_feedback.py": {
-      "sha256": "220da51c2be4d40237fb0bb1213c7a57c1a1c1027ab21d25181e0cb7b38fa99f",
-      "bytes": 9471
+      "sha256": "f548a8b66da5c8a9cafc0ccad44b8eb42282e56839bf6398129c30451c8cb196",
+      "bytes": 10425
     },
     "scripts/test_reply_options.cjs": {
       "sha256": "8f2a40b6eed0f26028ec9dbd70e53f0d0d7bc2420679ec6fda98ffd0c29f807f",
@@ -446,8 +470,12 @@
       "bytes": 3045
     },
     "scripts/test_upgrade.py": {
-      "sha256": "48824483a77154afe13a1f015ac52c1b6c67dcb46584e873199d9137c2103ee0",
-      "bytes": 3107
+      "sha256": "8f00e84e392aaf3f32f4454b0c7ebdd431a9b335cccff07726c1d5cd13018b3a",
+      "bytes": 5241
+    },
+    "scripts/test_user_feedback_fixes.py": {
+      "sha256": "63c1d3f47d197ce73dcd0022bdb7be44bb03636c11746faf07f78ffe750ddf01",
+      "bytes": 4097
     },
     "scripts/test_value_setup.py": {
       "sha256": "5bb4c618e16131edfacc97b6c86a7f956a767a10d24f3c5d4c461dd842919ad5",
@@ -458,12 +486,12 @@
       "bytes": 3616
     },
     "scripts/upgrade_existing.py": {
-      "sha256": "b850835da974ee43f379d66e5932c2dbe05c20e070f1575f22d87e9efc1b67d6",
-      "bytes": 3434
+      "sha256": "4211fb71a7084332ad45878c16f591fe47b3efb593cb9aeda3621527535e7446",
+      "bytes": 4824
     },
     "workbench.py": {
-      "sha256": "48d58b4fec840adbdcceeb278a8bd648b34cab32b255eeb90da455a1ce02a51d",
-      "bytes": 26560
+      "sha256": "7bc10a503ae0ba112e130efe0eec7657113c7f2fc675859d1df3c694df348a37",
+      "bytes": 28700
     }
   }
 }

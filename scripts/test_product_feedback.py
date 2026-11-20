@@ -6,7 +6,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'app'))
 import product_feedback as f
 class FeedbackTests(unittest.TestCase):
  def setUp(self):
-  self.temp=tempfile.TemporaryDirectory();self.folder=Path(self.temp.name);self.now=datetime(2026,11,20,18,tzinfo=timezone.utc);self.posts=[]
+  self.temp=tempfile.TemporaryDirectory();self.folder=Path(self.temp.name);self.now=datetime(2026,11,20,18,tzinfo=timezone.utc);self.posts=[];f.write(self.folder/'product-feedback.json',{'active_dates':['2026-10-'+str(n).zfill(2) for n in range(1,11)]})
   self.contact={'feedback_form':{'url':'https://docs.google.com/forms/d/e/TEST_FORM/viewform','endpoint':'https://script.google.com/macros/s/TEST_SERVICE/exec','entries':dict(zip(['rating','hours','comments','usage','email'],['entry.'+str(i) for i in range(1,6)]))}}
   self.progress={'tasks':{'a':{'done':True,'updated_at':'2026-11-18T14:00:00Z','task_snapshot':{'title':'PRIVATE DEAL SECRET'}},'b':{'done':False,'updated_at':'2026-11-18T14:00:00Z'},'c':{'done':True,'updated_at':'2026-11-10T14:00:00Z'},'d':{'done':True,'updated_at':123}}}
  def tearDown(self):self.temp.cleanup()
@@ -16,7 +16,15 @@ class FeedbackTests(unittest.TestCase):
  def submit(self,**kw):return self.action('submit',week='2026-11-16',rating=0,**kw)
  def state(self,now=None):return f.summary(self.folder,self.progress,now or self.now,'America/New_York',self.contact,'operator@example.com')
  def test_weekly_due_and_tuesday_quiet(self):
-  self.assertTrue(self.state()['due']);self.assertFalse(self.state(datetime(2026,11,17,tzinfo=timezone.utc))['due']);self.assertEqual(self.posts,[])
+  self.assertTrue(self.state()['due']);self.assertTrue(self.state(datetime(2026,11,17,tzinfo=timezone.utc))['due']);self.assertEqual(self.posts,[])
+ def test_new_user_and_forced_hash_do_not_prompt_before_ten_use_days(self):
+  f.write(self.folder/'product-feedback.json',{'active_dates':['2026-11-20']*20+['2099-01-01','invalid']})
+  self.assertFalse(self.state()['due']);self.assertEqual(self.state()['usage_days'],1)
+  self.assertFalse(f.summary(self.folder,self.progress,self.now,'America/New_York',self.contact,force=True)['due'])
+  f.write(self.folder/'product-feedback.json',{'active_dates':['2026-10-'+str(n).zfill(2) for n in range(1,10)]})
+  self.assertFalse(self.state()['due']);self.action('visit');self.assertTrue(self.state()['due'])
+ def test_first_prompt_is_available_on_tenth_use_day_even_before_friday(self):
+  self.assertTrue(self.state(datetime(2026,11,18,18,tzinfo=timezone.utc))['due'])
  def test_visit_deduplicates_locally_and_never_submits(self):
   self.action('visit');self.action('visit');self.assertEqual(self.state()['counts'],{'active_days':1,'tasks_marked_done':1});self.assertEqual(self.posts,[])
  def test_one_submit_has_exact_allowed_data_and_verified_receipt(self):
@@ -34,7 +42,7 @@ class FeedbackTests(unittest.TestCase):
   self.assertEqual(self.posts,[])
  def test_stale_week_has_no_writes(self):
   with self.assertRaises(ValueError):self.action('submit',week='2026-11-09',rating=5)
-  self.assertFalse((self.folder/'product-feedback.json').exists())
+  self.assertEqual(f.read(self.folder/'product-feedback.json',{})['active_dates'],['2026-10-'+str(n).zfill(2) for n in range(1,11)])
  def test_form_fallback_prefills_every_field_without_submission(self):
   out=self.action('form',week='2026-11-16',rating=7,hours=3,comments='Clearer cards',email='me@example.com',include_counts=False);q=parse_qs(urlsplit(out['url']).query)
   self.assertEqual(q['entry.1'],['7']);self.assertEqual(q['entry.2'],['3']);self.assertEqual(q['entry.3'],['Clearer cards']);self.assertEqual(q['entry.5'],['me@example.com']);self.assertIn('Usage counts not included.',q['entry.4'][0]);self.assertEqual(self.posts,[]);self.assertTrue(out['state']['due'])
@@ -87,7 +95,7 @@ class FeedbackTests(unittest.TestCase):
  def test_update_check_pins_checked_release_and_sends_no_private_data(self):
   urls=[]
   def fetch(req):urls.append(req.full_url);return self.release()
-  r=f.release_status(fetch=fetch);self.assertTrue(r['available']);self.assertIn('/releases/tag/v0.6.0',r['upgrade_prompt']);self.assertEqual(urls,['https://api.github.com/repos/sagaillj/presales-workbench/releases/latest'])
+  r=f.release_status(installed='0.5.1',fetch=fetch);self.assertTrue(r['available']);self.assertIn('/releases/tag/v0.6.0',r['upgrade_prompt']);self.assertEqual(urls,['https://api.github.com/repos/sagaillj/presales-workbench/releases/latest'])
  def test_bad_release_offline_and_old_versions_are_safe(self):
   for change in [{'prerelease':True},{'html_url':'https://evil.example/'},{'assets':[]}]:self.assertEqual(f.release_status(fetch=lambda _:{**self.release(),**change})['status'],'unavailable')
   self.assertFalse(f.release_status(fetch=lambda _:self.release('v0.4.0'))['available'])

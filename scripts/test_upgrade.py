@@ -29,7 +29,37 @@ class UpgradeTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             a,b=Path(t)/'new',Path(t)/'existing';make(a,'new');make(b,'old');(b/'workbench.py').write_text('my edit')
             with self.assertRaises(ValueError):m.upgrade(a,b)
-            self.assertEqual((b/'workbench.py').read_text(),'my edit');self.assertFalse((b/'workspace').exists())
+            self.assertEqual((b/'workbench.py').read_text(),'my edit');self.assertTrue((b/'workspace/LOCAL-CHANGES.md').exists())
+
+    def test_disjoint_local_edits_reapply_and_journal_survives_second_update(self):
+        with tempfile.TemporaryDirectory() as t:
+            a,b=Path(t)/'new',Path(t)/'existing';make(a,'upstream\nkeep\nfooter\n');make(b,'header\nkeep\nfooter\n')
+            m.local_changes.capture(b)
+            (b/'workbench.py').write_text('header\nkeep\nmy local line\n')
+            result=m.upgrade(a,b)
+            self.assertEqual((b/'workbench.py').read_text(),'upstream\nkeep\nmy local line\n')
+            self.assertIn('workbench.py',result['customizations_reapplied'])
+            packet=m.local_changes.load(b);self.assertEqual(packet['files'][0]['path'],'workbench.py')
+            self.assertIn('base_base64',packet['files'][0])
+            (a/'workbench.py').write_text('upstream\nkeep updated\nfooter\n')
+            (a/'BUNDLE-MANIFEST.json').write_text(json.dumps({'files':{n:{'sha256':hashlib.sha256((a/n).read_bytes()).hexdigest()} for n in ['workbench.py','VERSION']}}))
+            m.upgrade(a,b)
+            self.assertEqual((b/'workbench.py').read_text(),'upstream\nkeep updated\nmy local line\n')
+
+    def test_verified_old_release_can_supply_baseline_for_existing_edits(self):
+        with tempfile.TemporaryDirectory() as t:
+            a,b,old=Path(t)/'new',Path(t)/'existing',Path(t)/'old-release'
+            make(a,'upstream\nkeep\nfooter\n');make(b,'header\nkeep\nfooter\n');make(old,'header\nkeep\nfooter\n')
+            (b/'workbench.py').write_text('header\nkeep\nmy local line\n')
+            m.upgrade(a,b,baseline_source=old)
+            self.assertEqual((b/'workbench.py').read_text(),'upstream\nkeep\nmy local line\n')
+
+    def test_overlapping_changes_stop_without_overwriting_custom_code(self):
+        with tempfile.TemporaryDirectory() as t:
+            a,b=Path(t)/'new',Path(t)/'existing';make(a,'release line\n');make(b,'original line\n')
+            m.local_changes.capture(b);(b/'workbench.py').write_text('my line\n')
+            with self.assertRaisesRegex(ValueError,'LOCAL-CHANGES.md'):m.upgrade(a,b)
+            self.assertEqual((b/'workbench.py').read_text(),'my line\n')
     def test_case_variants_workspace_and_traversal_are_rejected(self):
         with tempfile.TemporaryDirectory() as t:
             for name in ['Workspace/profile.json','WORKSPACE/personal/state.json','../escape','/tmp/escape']:

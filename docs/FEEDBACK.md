@@ -19,3 +19,11 @@ Your answers remain saved locally. A request with uncertain status stays unconfi
 The prefilled Google Form is a fallback. Workbench supplies the fields, you review them and click Submit in Google Forms. Opening the form is not proof of submission. A local I submitted the form confirmation is explicitly user-reported. There is no copying or pasting. Very long Unicode comments may need shortening to fit a reliable prefill URL.
 
 Local records live under workspace/<mode>/product-feedback.json, separate from task progress and excluded from clean exports. Demo and personal modes are separate. Feedback never changes CRM permissions or sends email.
+# First check-in timing
+
+The NPS check-in remains hidden until **10 distinct days of actual local use**.
+Repeated visits on one day, installation age and downloads do not count as extra
+days. The first prompt can appear on the tenth use day; subsequent prompts honor
+the selected weekly or every-other-week cadence. Early manual links do not expose
+the rating form. Feedback remains optional and is sent only by the user.
+

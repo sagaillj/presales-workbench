@@ -19,7 +19,7 @@ import uuid
 from time_savings import savings_summary
 REPOSITORY='sagaillj/presales-workbench'
 LATEST='https://github.com/'+REPOSITORY+'/releases/latest'
-VERSION='0.5.1'
+VERSION=(Path(__file__).resolve().parents[1]/'VERSION').read_text().strip() if (Path(__file__).resolve().parents[1]/'VERSION').is_file() else '0.5.1'
 _LOCK=threading.RLock()
 DONE={'submitted_verified','submitted_user_reported','sent_user_reported','skipped'}
 def now_at(now=None,zone='UTC'):
@@ -49,14 +49,25 @@ def counts(folder,progress,now,zone):
             if at.tzinfo and week<=now_at(at,zone).date().isoformat()<=now.date().isoformat():done+=1
         except (ValueError,TypeError):pass
     return {'active_days':sum(1 for day in saved.get('active_dates',[]) if week<=day<=now.date().isoformat()),'tasks_marked_done':done}
+def feedback_eligibility(saved,now):
+    # Count actual distinct local use dates, never install/download age or future dates.
+    days=set()
+    for value in saved.get('active_dates',[]):
+        try:
+            day=datetime.strptime(value,'%Y-%m-%d').date()
+            if day<=now.date():days.add(day)
+        except (TypeError,ValueError):pass
+    return {'eligible':len(days)>=10,'usage_days':len(days),'minimum_usage_days':10}
 def summary(folder,progress,now=None,zone='UTC',contact=None,operator=None,force=False):
     now=now_at(now,zone);week=week_key(now);saved=read(Path(folder)/'product-feedback.json',{});record=saved.get('weeks',{}).get(week,{})
     cadence=saved.get('cadence_weeks',1);anchor=saved.get('cadence_anchor',week)
     try:scheduled=((now.date()-datetime.fromisoformat(anchor).date()).days//7)%cadence==0
     except (ValueError,TypeError,ZeroDivisionError):scheduled=True;cadence=1
-    due=saved.get('enabled',True) and (force or record.get('status') in {'submission_pending','form_opened'} or now.weekday()>=4 and scheduled) and record.get('status') not in DONE
+    eligibility=feedback_eligibility(saved,now)
+    first=not any(row.get('status') in DONE for row in saved.get('weeks',{}).values())
+    due=eligibility['eligible'] and saved.get('enabled',True) and (force or first and scheduled or record.get('status') in {'submission_pending','form_opened'} or now.weekday()>=4 and scheduled) and record.get('status') not in DONE
     cfg=form_config(contact)
-    return {'week':week,'due':bool(due),'enabled':saved.get('enabled',True),'cadence_weeks':cadence,'record':record,'counts':counts(folder,progress,now,zone),'time_savings':savings_summary(progress,now,zone,retrospective=read(Path(folder)/'time-savings-ledger.json',{})),'version':VERSION,'submission_reference':hashlib.sha256((saved['installation_id']+':'+week).encode()).hexdigest() if saved.get('installation_id') else None,'email':record.get('email',operator if valid_email(operator) else ''),'destination':{'configured':cfg['configured'],'direct':cfg['direct'],'form_available':cfg['form_valid'],'label':'Workbench feedback · Google Form'},'privacy':'Share your rating, optional comments and time estimate. Include local usage counts only if you choose. No deal names, messages or transcripts.'}
+    return {**eligibility,'week':week,'due':bool(due),'enabled':saved.get('enabled',True),'cadence_weeks':cadence,'record':record,'counts':counts(folder,progress,now,zone),'time_savings':savings_summary(progress,now,zone,retrospective=read(Path(folder)/'time-savings-ledger.json',{})),'version':VERSION,'submission_reference':hashlib.sha256((saved['installation_id']+':'+week).encode()).hexdigest() if saved.get('installation_id') else None,'email':record.get('email',operator if valid_email(operator) else ''),'destination':{'configured':cfg['configured'],'direct':cfg['direct'],'form_available':cfg['form_valid'],'label':'Workbench feedback · Google Form'},'privacy':'Share your rating, optional comments and time estimate. Include local usage counts only if you choose. No deal names, messages or transcripts.'}
 def payload(body,saved,week,folder,progress,now,zone,operator):
     rating=body.get('rating')
     if type(rating) is not int or not 0<=rating<=10:raise ValueError('Choose a rating from 0 to 10')

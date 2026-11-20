@@ -24,3 +24,5 @@ explicit internal-calendar grant plus live availability, deduplication and saved
 event readback permits booking. All outside-world write capabilities remain off
 for new users, and no customer's invitation or another operator's personal grant
 is included.
+
+During setup discover the actual call-capture method, including Fellow or other tools; follow ONBOARDING.md before source reads. Ask which additional apps the user wants tracked, such as Asana. Read automatic-feature settings before existing runs; all external execution defaults off and still requires this user’s authority. Keep NPS hidden until ten distinct use days. Preserve app/workflow customizations in private workspace/LOCAL-CHANGES.md; capture after edits and before updates, reapply compatible edits, and resolve overlaps without overwriting user work.

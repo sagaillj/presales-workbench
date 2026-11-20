@@ -19,6 +19,7 @@ import zipfile
 
 ROOT=Path(__file__).resolve().parent
 sys.path.insert(0,str(ROOT/'app'))
+import local_changes, call_capture, automation_preferences
 import onboarding
 import orientation
 from compensation import catalog_payload, preset_from_verified_profile
@@ -115,6 +116,8 @@ class Store:
             derived=preset_from_verified_profile(profile,catalog_payload(self.root/'workspace/compensation-role-catalog.json'))
             if derived:profile=deepcopy(profile);profile['compensation']=derived
             state['profile']=deepcopy(profile)
+            state['automation_features']=automation_preferences.state(profile)
+            state['customization_journal']=local_changes.capture_status(self.root,force=False)
             state['time_savings']=savings_summary(state['progress'],zone=profile.get('organization',{}).get('timezone') or 'UTC',retrospective=read_json(self.folder/'time-savings-ledger.json',{}))
             state['workbench_calendar']=read_json(self.folder/'personal-calendar-days.json',state.get('workbench_calendar',{}))
             state['metric_insights']=read_json(self.folder/'metric-insights.json',state.get('metric_insights',{}))
@@ -131,7 +134,9 @@ class Store:
         with self.lock:
             profile=read_json(self.profile_path,read_json(self.root/'profile.example.json'))
             profile=onboarding.update(profile,body,catalog_payload(self.root/'workspace/compensation-role-catalog.json'))
+            if body.get('action')=='demo_prep_preferences':profile=automation_preferences.update(profile,{'action':'set','changes':{'demo_prep_booking':body['enabled']},'revision':automation_preferences.state(profile)['revision']})
             atomic_json(self.profile_path,profile)
+            local_changes.capture_status(self.root,True)
             if body.get('action')=='preferences' and ('feedback_cadence' in body or 'feedback_sharing' in body):
                 folder=self.root/'workspace/personal';settings=read_json(folder/'product-feedback.json',{});pref=profile.get('preferences',{}).get('product_feedback',{})
                 settings.update(enabled=pref.get('mode')!='off',cadence_weeks=pref.get('cadence_weeks',1),cadence_anchor=product_feedback.week_key(product_feedback.now_at(zone=profile.get('organization',{}).get('timezone') or 'UTC')))
@@ -244,6 +249,9 @@ class Handler(BaseHTTPRequestHandler):
             self.send_response(302);self.send_header('Location','/?mode='+mode);self.send_header('Content-Length','0');self.send_header('Cache-Control','no-store');self.end_headers();return
         if route=='/api/workbench-update':return self.send(200,workbench_updates.state(self.selected_store().folder))
         if route=='/api/release':return self.send(200,product_feedback.release_status())
+        if route=='/api/automation-features':return self.send(200,automation_preferences.state(read_json(self.server.store.profile_path,self.server.store.profile)))
+        if route=='/api/local-changes':
+            root=self.server.store.root;return self.send(200,{**local_changes.capture_status(root),'ui_preferences':read_json(root/'workspace/ui-preferences.json',{})})
         if route=='/api/product-feedback':
             store=self.selected_store();profile=read_json(store.profile_path,store.profile)
             result=product_feedback.summary(store.folder,read_json(store.progress_path,{}),zone=profile.get('organization',{}).get('timezone') or 'UTC',contact=read_json(store.root/'app/product-contact.json',{}),operator=profile.get('identity',{}).get('email'));return self.send(200,result)
@@ -258,7 +266,7 @@ class Handler(BaseHTTPRequestHandler):
             if derived:profile=deepcopy(profile);profile['compensation']=derived
             return self.send(200,{'profile':profile,'compensation_catalog':catalog,'handoff':onboarding.handoff(profile),'orientation_status':orientation.orientation_status(profile),'schedule_status':orientation.schedule_status(profile)})
         files={'/cadence-settings.js':('app/cadence-settings.js','text/javascript'),'/cadence-settings.css':('app/cadence-settings.css','text/css'),'/demo-prep-settings.js':('app/demo-prep-settings.js','text/javascript'),'/demo-prep-settings.css':('app/demo-prep-settings.css','text/css'),'/reply-links.js':('app/reply-links.js','text/javascript'),'/reply-cards.css':('app/reply-cards.css','text/css'),'/branding/slack-icon.svg':('app/branding/slack-icon.svg','image/svg+xml'),'/branding/gmail-icon.svg':('app/branding/gmail-icon.svg','image/svg+xml'),'/card-order.js':('app/card-order.js','text/javascript'),'/':('app/index.html','text/html; charset=utf-8'),'/completion.js':('app/completion.js','text/javascript'),'/favicon.svg':('app/favicon.svg','image/svg+xml'),'/favicon.ico':('app/favicon.svg','image/svg+xml'),'/branding/hubspot-sprocket.svg':('app/branding/hubspot-sprocket.svg','image/svg+xml'),'/branding/workbench-hammock.png':('app/branding/workbench-hammock.png','image/png')}
-        for asset in ['task-archive.js','task-archive.css','metrics-focus.js','metrics-focus.css','coaching-focus.js','coaching-focus.css','header-details.js','workbench-updates.js','insight-views.js','insight-views.css','header-variants.css','appearance.js','product-feedback.js','product-feedback.css','presentation.js']:
+        for asset in ['task-archive.js','task-archive.css','metrics-focus.js','metrics-focus.css','coaching-focus.js','coaching-focus.css','header-details.js','workbench-updates.js','insight-views.js','insight-views.css','header-variants.css','appearance.js','product-feedback.js','product-feedback.css','presentation.js','automation-settings.js','automation-settings.css','local-changes.js']:
             files['/'+asset]=('app/'+asset,'text/javascript; charset=utf-8' if asset.endswith('.js') else 'text/css; charset=utf-8')
         files['/branding/lexend-deca.ttf']=('app/branding/lexend-deca.ttf','font/ttf')
         if route in files:
@@ -277,6 +285,16 @@ class Handler(BaseHTTPRequestHandler):
             elif route=='/api/product-feedback':
                 store=self.selected_store();profile=read_json(store.profile_path,store.profile)
                 result=product_feedback.update(store.folder,body,read_json(store.progress_path,{}),read_json(store.root/'app/product-contact.json',{}),profile.get('identity',{}).get('email'),zone=profile.get('organization',{}).get('timezone') or 'UTC')
+            elif route=='/api/automation-features':
+                store=self.server.store
+                with store.lock:
+                    profile=automation_preferences.update(read_json(store.profile_path,store.profile),body)
+                    atomic_json(store.profile_path,profile);local_changes.capture_status(store.root,True);result=automation_preferences.state(profile)
+            elif route=='/api/local-changes':
+                store=self.server.store;ui=body.get('ui_preferences')
+                if not isinstance(ui,dict) or set(ui)-{'workbench-appearance','workbench-month-trail'} or any(not isinstance(v,str) or len(v)>16000 for v in ui.values()):raise ValueError('Invalid appearance preferences')
+                with store.lock:
+                    atomic_json(store.root/'workspace/ui-preferences.json',ui);result=local_changes.capture_status(store.root,True)
             elif route=='/api/onboarding':result=self.server.store.setup(body)
             elif route in ['/api/archive','/api/task-archive']:result=self.selected_store().archive(body)
             elif route=='/api/card-order':result=self.selected_store().order(body)
@@ -305,6 +323,8 @@ def main():
     commands=parser.add_subparsers(dest='command')
     serve=commands.add_parser('serve');serve.add_argument('--port',type=int,default=8781);serve.add_argument('--mode',choices=['demo','personal']);serve.add_argument('--open',action='store_true')
     commands.add_parser('doctor')
+    commands.add_parser('discover-capture')
+    commands.add_parser('capture-changes')
     imp=commands.add_parser('import');imp.add_argument('packet');imp.add_argument('--mode',choices=['personal'],default='personal')
     setup=commands.add_parser('configure');setup.add_argument('answers',help='Local preferences JSON; never credentials or write grants')
     for command in ['record-orientation','record-schedule']:
@@ -312,6 +332,8 @@ def main():
     export=commands.add_parser('export');export.add_argument('destination')
     args=parser.parse_args()
     if args.command=='export':print(export_bundle(ROOT,args.destination));return
+    if args.command=='discover-capture':print(json.dumps(call_capture.discover(),indent=2));return
+    if args.command=='capture-changes':print(json.dumps(local_changes.capture(ROOT),indent=2));return
     if args.command=='doctor':
         profile=read_json(ROOT/'workspace/profile.json',read_json(ROOT/'profile.example.json'))
         print(json.dumps({'python_supported':sys.version_info>=(3,10),'mode':profile.get('mode'),'identity_verified':profile.get('identity',{}).get('verified',False),'sources':profile.get('sources',{}),'schedules':orientation.schedule_status(profile),'orientation':orientation.orientation_status(profile),'external_transport':'No CRM/message transport. Feedback submits only on your click to the fixed collector; public GitHub metadata checks can be disabled.'},indent=2));return

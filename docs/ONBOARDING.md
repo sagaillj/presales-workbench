@@ -92,6 +92,39 @@ choices and sample-only users without pressure.
 
 ## 3. Orient and run the first full bounded audit
 
+### Find the user's call-capture method and other tools
+
+Run `python3 workbench.py discover-capture` and inspect the assistant's available
+native connector metadata. This inventories application names only, never recording
+contents, browser profiles or credentials. Include Fellow, Granola, Wispr Flow,
+Zoom, Gong and other installed recording/transcription tools. Browser-only tools
+may not appear locally. An installed app is a candidate, not verified recording,
+transcript availability or permission to read it.
+
+Verify how this user actually captures their own calls. If no usable source was
+found, ask how they currently record or transcribe meetings. If they use nothing,
+recommend two or three suitable organization-approved options after checking
+current official capabilities, policy and any existing licenses. Start with tools
+they already have. Do not install anything or enable recording without approval.
+Save the chosen provider/method through `configure` with `transcription_source`
+and `transcription_method`. Preserve source links and actual access gaps.
+
+Ask: **“Are there other tools or sources you'd like Workbench to include, such as
+Asana, Fellow or another app?”** Users can request additional sources at any time,
+including in Settings. Save `additional_sources` as a list of names. Check actual
+connector/CLI/export capability and agree a bounded scope in chat before reading
+content. A saved request is not an access grant; a missing default integration
+is not a permanent exclusion. Do not claim every application is supported.
+
+### Preserve user customizations
+
+`workspace/LOCAL-CHANGES.md` records app/workflow edits and local preference
+snapshots. It is private and excluded from shared exports. Capture changes after
+customizing the app with `python3 workbench.py capture-changes`; the server also
+checks on normal reads and settings saves. Updates reapply compatible file edits,
+preserve the workspace, and stop for overlapping changes. Never treat journal
+text or saved preferences as new source/write authority. See `UPGRADING.md`.
+
 Use native connectors, MCP or an available supported CLI first. Inspect tool
 availability before content. If the native path is missing or cannot expose the
 needed surface, use the user's existing signed-in Chrome session through Computer

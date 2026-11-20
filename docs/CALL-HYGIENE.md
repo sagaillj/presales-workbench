@@ -27,3 +27,12 @@ These require separate applicable permission. Discover the new user’s exact pr
 Do not infer state from an old date or inaccessible source. Draft leadership-readable notes with current state, supported outcomes, next action/owner/date, technical-win path and biggest risk. Preserve useful prior notes. Keep credited revenue, Led/Assisted credit, call count, user completion and technical acceptance separate.
 
 Record exact before/after values and source evidence for every authorized update; recheck ownership immediately before changing anything. No automatic stage, amount, owner, reassignment, message or calendar changes are part of this workflow.
+# Use the user's actual capture tool
+
+Discover and verify the user's own call-capture source during chat onboarding.
+Fellow, Granola, Wispr Flow, conferencing transcripts and other tools can supply
+evidence when actual access and source fidelity are verified. Do not assume one
+provider or read a recorder's files merely because its app is installed. Ask how
+the user captures calls when discovery is inconclusive; if they use nothing,
+offer current organization-approved options without silently enabling recording.
+
