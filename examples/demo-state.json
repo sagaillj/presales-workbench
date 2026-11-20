@@ -570,7 +570,9 @@
         "external": 42,
         "internal": 18,
         "as_of": "2026-11-03T13:00:00Z",
-        "basis": "Fictional demonstration"
+        "basis": "Fictional demonstration",
+        "build": 3,
+        "unclassified": 0
       },
       "revenue": {
         "actual": 18500,
@@ -588,25 +590,29 @@
             "id": "1",
             "name": "Harbor House",
             "tier": "Led",
-            "amount": 6200
+            "amount": 6200,
+            "mrr": 6200
           },
           {
             "id": "2",
             "name": "Juniper Systems",
             "tier": "Led",
-            "amount": 4800
+            "amount": 4800,
+            "mrr": 4800
           },
           {
             "id": "3",
             "name": "Pine Works",
             "tier": "Assisted",
-            "amount": 3900
+            "amount": 3900,
+            "mrr": 3900
           },
           {
             "id": "4",
             "name": "Westport",
             "tier": "Supported",
-            "amount": 3600
+            "amount": 3600,
+            "mrr": 3600
           }
         ],
         "components": {
@@ -668,7 +674,14 @@
       },
       "upcoming": {},
       "roster": {
-        "open_assigned": 8
+        "open_assigned": 8,
+        "status_counts": {
+          "Active": 8,
+          "Tracking": 12,
+          "Pending": 3,
+          "Completed": 5
+        },
+        "as_of": "2026-11-03T13:00:00Z"
       }
     },
     "schedule": [
@@ -779,6 +792,28 @@
         "kind": "Assigned",
         "trigger": "New SE assignment to Cedar Harbor Labs.",
         "recommended_answer": "Ask Avery where SE help would be useful."
+      },
+      "demo-review": {
+        "kind": "Assigned \u00b7 fictional example",
+        "trigger": "Your manager asked for one technical win and one repeatable lesson for Friday\u2019s team review.",
+        "recommended_answer": "Lead with the customer decision: the pilot confirmed that contractor access can follow the existing identity workflow. Show the proof, name the remaining validation owner, and close with the next test. Carry forward one practice: start with the finished customer result before explaining the setup.",
+        "needed_from_you": "Review these talking points and adapt them for the team discussion.",
+        "requests": [
+          {
+            "person": "Alex Chen \u00b7 manager",
+            "date": "Nov 18",
+            "quote": "Bring one technical win and one lesson we can reuse in the team review.",
+            "url": "https://example.com/team-review"
+          }
+        ],
+        "action": "Review the prepared talking points.",
+        "done_when": "Talking points reviewed and ready for the team discussion.",
+        "sources": [
+          {
+            "label": "Fictional team-review request",
+            "url": "https://example.com/team-review"
+          }
+        ]
       }
     }
   }

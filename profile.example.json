@@ -58,6 +58,24 @@
     "weekly": {
       "weekday": "Friday",
       "local_time": "18:00"
+    },
+    "state": "proposed",
+    "recurring_requested": false,
+    "timezone": null,
+    "timezone_verified": false,
+    "light": {
+      "weekdays_only": true,
+      "local_times": [
+        "09:00",
+        "12:00",
+        "15:00"
+      ],
+      "mode": "read_only",
+      "enabled": false
+    },
+    "jobs": [],
+    "authorization": {
+      "state": "awaiting_chat_authorization"
     }
   },
   "policies": {
@@ -91,12 +109,38 @@
       "cadence_weeks": 1,
       "mode": "ask",
       "automatic_submission": false
+    },
+    "demo_prep_booking": {
+      "enabled": false,
+      "state": "off",
+      "duration_minutes": 15,
+      "minimum_notice_hours": null,
+      "prefer_adjacent": false,
+      "calendar_color_name": null
     }
   },
   "onboarding": {
     "stage": "not_started",
     "preview_seen": false,
-    "updated_at": null
+    "updated_at": null,
+    "first_run": null
   },
-  "read_requests": {}
+  "read_requests": {},
+  "compensation": {
+    "currency": "USD",
+    "mode": "band",
+    "hourly_rate": null,
+    "annual_amount": null,
+    "annual_hours": 2080,
+    "annual_basis": "ote",
+    "role_level": null,
+    "band_verified": false,
+    "band_min": null,
+    "band_max": null,
+    "source_url": null,
+    "basis": "Role and country benchmark pending; choose a custom value or approve source research",
+    "compensation_method": "role",
+    "role_key": null,
+    "country": null
+  }
 }

@@ -29,17 +29,17 @@ class StarterTests(unittest.TestCase):
         self.assertIsNone(s['profile']['identity']['name']);self.assertIsNone(s['profile']['organization']['manager']['name'])
         self.assertTrue(all(v is False for v in s['profile']['permissions'].values()))
         self.assertEqual(len(s['product_roadblocks']['roadblocks']),7)
-    def test_personal_workspace_starts_empty_and_uses_its_own_profile(self):
+    def test_personal_workspace_starts_with_guides_and_uses_its_own_profile(self):
         profile=json.loads((self.root/'profile.example.json').read_text());profile['mode']='personal';profile['identity'].update(name='Casey Example',email='casey@example.invalid',verified=True);profile['organization']['manager']['name']='Robin Example'
         app.atomic_json(self.root/'workspace/profile.json',profile)
-        s=app.Store(self.root).state();self.assertEqual(s['tasks'],[]);self.assertEqual(s['profile']['identity']['name'],'Casey Example');self.assertEqual(s['profile']['organization']['manager']['name'],'Robin Example')
+        s=app.Store(self.root).state();self.assertEqual([t for t in s['tasks'] if not t.get('orientation_guide')],[]);self.assertEqual({t['id'] for t in s['tasks']},{'orientation-customer-work','orientation-internal-work'});self.assertEqual(s['profile']['identity']['name'],'Casey Example');self.assertEqual(s['profile']['organization']['manager']['name'],'Robin Example')
     def test_refresh_and_retirement_preserve_completed_decisions(self):
         store=app.Store(self.root,'personal');packet=self.packet();store.import_packet(packet);id=packet['tasks'][0]['id']
         store.progress({'task_id':id,'done':True});saved=store.state()['progress']['tasks'][id]
         packet['tasks'][0]['title']='Refined title';store.import_packet(packet)
         self.assertEqual(store.state()['progress']['tasks'][id],saved)
         store.import_packet({'remove_task_ids':[id]});state=store.state()
-        self.assertEqual(state['tasks'],[]);self.assertEqual(state['progress']['tasks'][id],saved);self.assertIn('task_snapshot',saved)
+        self.assertEqual([t for t in state['tasks'] if not t.get('orientation_guide')],[]);self.assertEqual(state['progress']['tasks'][id],saved);self.assertIn('task_snapshot',saved)
     def test_progress_and_identity_cannot_be_overwritten_by_an_import(self):
         store=app.Store(self.root,'personal')
         for key in ['progress','profile','permissions']:
@@ -69,7 +69,21 @@ class StarterTests(unittest.TestCase):
         store=app.Store(self.root,'demo');result=store.setup(self.answers());profile=result['profile']
         self.assertEqual(profile['identity']['name'],'Taylor Example');self.assertFalse(profile['identity']['verified']);self.assertEqual(profile['organization']['manager']['name'],'Robin Example')
         self.assertEqual(profile['preferences']['demo_flow'],'Outcome, proof, recap');self.assertFalse(profile['preferences']['modules']['weekly_qci']);self.assertFalse(profile['schedules']['enabled']);self.assertTrue(all(v is False for v in profile['permissions'].values()))
-        self.assertEqual(app.Store(self.root,'personal').state()['tasks'],[])
+        self.assertEqual([t for t in app.Store(self.root,'personal').state()['tasks'] if not t.get('orientation_guide')],[])
+    def test_verified_profile_presets_wizard_from_private_catalog_without_exporting_it(self):
+        profile=json.loads((self.root/'profile.example.json').read_text());profile['identity'].update(name='Casey Example',title='Senior Solutions Engineer',verified=True);profile['organization']['country']='CA'
+        app.atomic_json(self.root/'workspace/profile.json',profile)
+        catalog={'source_title':'Synthetic local grid','entries':[{'role':'Senior Solutions Engineer L1','country':'Canada','currency':'CAD','base':120000,'ote':208000,'source_url':'https://example.invalid/private-grid'}]}
+        app.atomic_json(self.root/'workspace/compensation-role-catalog.json',catalog)
+        server=app.ThreadingHTTPServer(('127.0.0.1',0),app.Handler);server.store=app.Store(self.root,'personal');thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start();url='http://127.0.0.1:'+str(server.server_address[1])
+        try:
+            payload=json.loads(urllib.request.urlopen(url+'/api/onboarding').read());comp=payload['profile']['compensation'];self.assertEqual(comp['role_key'],'senior');self.assertEqual(comp['country'],'CA');self.assertEqual(comp['currency'],'CAD');self.assertEqual(comp['hourly_rate'],100);self.assertTrue(comp['band_verified']);self.assertTrue(all(v is False for v in payload['profile']['permissions'].values()))
+            self.assertFalse(app.read_json(self.root/'workspace/profile.json')['compensation']['band_verified'])
+            profile['compensation'].update(mode='hourly',compensation_method='hourly',hourly_rate=77,user_overridden=True);app.atomic_json(self.root/'workspace/profile.json',profile)
+            payload=json.loads(urllib.request.urlopen(url+'/api/onboarding').read());self.assertEqual(payload['profile']['compensation']['hourly_rate'],77)
+            self.assertNotIn(self.root/'workspace/compensation-role-catalog.json',list(app.bundle_files(self.root)))
+        finally:server.shutdown();server.server_close();thread.join()
+
     def test_onboarding_requires_preview_and_never_claims_source_access(self):
         store=app.Store(self.root,'demo');store.setup(self.answers())
         with self.assertRaises(ValueError):store.setup({'action':'sources','sources':['email']})
@@ -106,15 +120,28 @@ class StarterTests(unittest.TestCase):
     def test_server_keeps_demo_personal_reads_and_writes_separate(self):
         server=app.ThreadingHTTPServer(('127.0.0.1',0),app.Handler);server.store=app.Store(self.root,'demo');thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start();url='http://127.0.0.1:'+str(server.server_address[1])
         try:
-            self.assertIn(b'Set up your SE Workbench',urllib.request.urlopen(url+'/setup').read())
+            with urllib.request.urlopen(url+'/setup') as response:
+                self.assertEqual(response.geturl(),url+'/?mode=demo');setup_page=response.read()
+            self.assertIn(b'Presales Workbench',setup_page);self.assertNotIn(b'No profile questionnaire',setup_page)
+            self.assertNotIn(b'href="/setup"',setup_page)
+            with urllib.request.urlopen(url+'/setup?mode=personal') as response:
+                self.assertEqual(response.geturl(),url+'/?mode=personal')
             req=urllib.request.Request(url+'/api/progress?mode=demo',data=b'{"task_id":"demo-flow","done":true}',headers={'Origin':url,'Content-Type':'application/json'})
             urllib.request.urlopen(req).close()
             sample=json.loads(urllib.request.urlopen(url+'/api/state?mode=demo').read());personal=json.loads(urllib.request.urlopen(url+'/api/state?mode=personal').read())
-            self.assertTrue(sample['progress']['tasks']['demo-flow']['done']);self.assertEqual(personal['progress']['tasks'],{});self.assertEqual(personal['tasks'],[])
+            self.assertTrue(sample['progress']['tasks']['demo-flow']['done']);self.assertEqual(personal['progress']['tasks'],{});self.assertEqual([t for t in personal['tasks'] if not t.get('orientation_guide')],[])
             req=urllib.request.Request(url+'/api/onboarding',data=json.dumps(self.answers()).encode(),headers={'Origin':'https://example.invalid','Content-Type':'application/json'})
             with self.assertRaises(urllib.error.HTTPError) as ctx:urllib.request.urlopen(req)
             self.assertEqual(ctx.exception.code,403);ctx.exception.close();self.assertFalse(server.store.profile_path.exists())
         finally:server.shutdown();server.server_close();thread.join()
+    def test_export_keeps_current_share_guide_sources_byte_exact(self):
+        dest=Path(self.temp.name)/'guide-parity.zip';app.export_bundle(self.root,dest)
+        with zipfile.ZipFile(dest) as archive:
+            for source in ['START-HERE.txt','SETUP-PROMPT.txt','docs/FIRST-TEST.md']:
+                name='presales-workbench-starter/'+source
+                self.assertIn(name,archive.namelist())
+                self.assertEqual(archive.read(name),(ROOT/source).read_bytes())
+
     def test_export_excludes_private_workspace_credentials_and_unrecognized_files(self):
         secret='PRIVATE_TEST_'+os.urandom(12).hex();private=self.root/'workspace/personal/private.json';private.parent.mkdir(parents=True);private.write_text(secret)
         (self.root/'.env').write_text(secret);(self.root/'my-notes.txt').write_text(secret)

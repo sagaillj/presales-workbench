@@ -30,3 +30,29 @@ Store detailed call ledgers, source cursors, research, source transcripts and we
 ## Request-first briefs
 
 Import task_briefs: {"items": {"stable-task-id": {"requests": [{"person": "verified source", "date": "actual source date", "quote": "exact text", "url": "verified source link"}], "recommended_answer": "short sourced recommendation", "needed_from_you": "remaining decision", "facts": [], "caveats": "known limits", "sources": []}}}. Briefs merge by task ID and cannot overwrite the separate progress ledger. Full presentation guidance: ACTION-CARDS.md.
+
+## Verified communication destinations
+
+For a source-reviewed Slack communication, attach a local `delivery` object with
+`verified: true`, `recipient_name` equal to the communication's exact current
+audience, `slack_team_id`, and `web_url` pointing to the verified original
+conversation. Include `slack_user_id` only after verifying the exact user, or
+`slack_channel_id` for the exact channel/group. Record the source and readback date
+in the private research ledger. For an existing DM, the verified client URL can
+supply the workspace and conversation IDs without guessing a user identity.
+
+Keep the communication's original `source_url`, author, message time and excerpt.
+Do not place credentials, cookies or tokens in delivery data. If audience or
+routing is uncertain, preserve the original supported web link and the specific
+gap; never manufacture a verified binding to obtain a native app link. Apply
+ACTION-CARDS.md's conversation review to every prepared response. Importing a
+binding or opening its destination grants no sending authority.
+
+## Demo-prep booking tasks
+
+A verified upcoming demo without a matching sales-rep prep uses one stable task
+bound to its native demo occurrence. Include `automation_feature_id:
+"demo_prep_booking"`, the exact deal URL, verified demo event/rep source and
+remaining booking action. Store actual saved prep-event readback separately;
+missing source coverage is not proof that a prep is absent. Do not import a
+permission grant or imply that a task toggle creates an event. Follow DEMO-PREP.md.

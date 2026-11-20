@@ -20,6 +20,6 @@ def update_order(current, body, plan, progress, now):
     previous = result.get('lanes', {}).get(lane, {}).get('ids', [])
     # Retain hidden/completed IDs for future reopening; they never create cards.
     saved = ids + [x for x in previous if x not in ids] if ids else []
-    result.setdefault('lanes', {})[lane] = {'ids': saved, 'updated_at': now, 'basis': 'user_display_order'}
+    result.setdefault('lanes', {})[lane] = {'ids': saved, 'updated_at': now, 'basis': 'user_display_order', 'cross_group_order': bool(saved) and (body.get('intent') == 'skip' or current.get('lanes', {}).get(lane, {}).get('cross_group_order', False))}
     result['revision'] = revision + 1
     return result

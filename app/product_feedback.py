@@ -16,6 +16,7 @@ import sys
 import urllib.error
 import urllib.request
 import uuid
+from time_savings import savings_summary
 REPOSITORY='sagaillj/presales-workbench'
 LATEST='https://github.com/'+REPOSITORY+'/releases/latest'
 VERSION='0.5.1'
@@ -55,7 +56,7 @@ def summary(folder,progress,now=None,zone='UTC',contact=None,operator=None,force
     except (ValueError,TypeError,ZeroDivisionError):scheduled=True;cadence=1
     due=saved.get('enabled',True) and (force or record.get('status') in {'submission_pending','form_opened'} or now.weekday()>=4 and scheduled) and record.get('status') not in DONE
     cfg=form_config(contact)
-    return {'week':week,'due':bool(due),'enabled':saved.get('enabled',True),'cadence_weeks':cadence,'record':record,'counts':counts(folder,progress,now,zone),'version':VERSION,'submission_reference':hashlib.sha256((saved['installation_id']+':'+week).encode()).hexdigest() if saved.get('installation_id') else None,'email':record.get('email',operator if valid_email(operator) else ''),'destination':{'configured':cfg['configured'],'direct':cfg['direct'],'form_available':cfg['form_valid'],'label':'Workbench feedback · Google Form'},'privacy':'Share your rating, optional comments and time estimate. Include local usage counts only if you choose. No deal names, messages or transcripts.'}
+    return {'week':week,'due':bool(due),'enabled':saved.get('enabled',True),'cadence_weeks':cadence,'record':record,'counts':counts(folder,progress,now,zone),'time_savings':savings_summary(progress,now,zone,retrospective=read(Path(folder)/'time-savings-ledger.json',{})),'version':VERSION,'submission_reference':hashlib.sha256((saved['installation_id']+':'+week).encode()).hexdigest() if saved.get('installation_id') else None,'email':record.get('email',operator if valid_email(operator) else ''),'destination':{'configured':cfg['configured'],'direct':cfg['direct'],'form_available':cfg['form_valid'],'label':'Workbench feedback · Google Form'},'privacy':'Share your rating, optional comments and time estimate. Include local usage counts only if you choose. No deal names, messages or transcripts.'}
 def payload(body,saved,week,folder,progress,now,zone,operator):
     rating=body.get('rating')
     if type(rating) is not int or not 0<=rating<=10:raise ValueError('Choose a rating from 0 to 10')
@@ -181,13 +182,15 @@ def release_status(installed=None,fetch=None):
             if len(raw)>500000:raise ValueError('Release response too large')
             payload=json.loads(raw)
         else:payload=fetch(request)
-        version=payload.get('tag_name');newer=version_tuple(version)>version_tuple(installed)
+        core=re.fullmatch(r'v?(\d+\.\d+\.\d+)(?:-[A-Za-z0-9.-]+)?',installed)
+        if not core:raise ValueError('Invalid installed version')
+        current=version_tuple(core.group(1));version=payload.get('tag_name');newer=version_tuple(version)>current or (version_tuple(version)==current and '-' in installed)
         if payload.get('draft') or payload.get('prerelease'):raise ValueError('Not a stable release')
         if payload.get('html_url')!='https://github.com/'+REPOSITORY+'/releases/tag/'+version:raise ValueError('Unexpected release destination')
         expected={'presales-workbench-starter-latest.zip','presales-workbench-starter-latest.sha256'}
         assets={x.get('name'):x.get('browser_download_url') for x in payload.get('assets',[]) if isinstance(x,dict)}
         for name in expected:
             if assets.get(name)!='https://github.com/'+REPOSITORY+'/releases/download/'+version+'/'+name:raise ValueError('Stable download assets missing')
-        return {'installed':installed,'latest':version.lstrip('v'),'available':newer,'ahead':version_tuple(installed)>version_tuple(version),'url':LATEST,'status':'checked','upgrade_prompt':'Help me update my existing Workbench to verified version '+version+' from '+payload['html_url']+'. Verify the release checksum and bundle manifest, read docs/UPGRADING.md, stop only this app, back up my setup, and run the included upgrade script. Preserve workspace, profile, feedback, voice preferences, progress, schedules and permissions. Stop for review if app files have local edits. Restart and run the first-test checklist. Do not add source access or write grants.'}
+        return {'release_id':payload.get('id'),'release_url':payload.get('html_url'),'installed':installed,'latest':version.lstrip('v'),'available':newer,'ahead':current>version_tuple(version),'url':LATEST,'status':'checked','upgrade_prompt':'Help me update my existing Workbench to verified version '+version+' from '+payload['html_url']+'. Verify the release checksum and bundle manifest, read docs/UPGRADING.md, stop only this app, back up my setup, and run the included upgrade script. Preserve workspace, profile, feedback, voice preferences, progress, schedules and permissions. Stop for review if app files have local edits. Restart and run the first-test checklist. Do not add source access or write grants.'}
     except Exception:
         return {'installed':installed,'status':'unavailable','url':LATEST,'message':'Could not check GitHub. Your current Workbench is unchanged.'}

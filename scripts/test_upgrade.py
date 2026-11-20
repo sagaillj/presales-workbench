@@ -15,6 +15,16 @@ class UpgradeTests(unittest.TestCase):
             a,b=Path(t)/'new',Path(t)/'existing';make(a,'new');make(b,'old')
             p=b/'workspace/personal/progress.json';p.parent.mkdir(parents=True);p.write_text('{"done":true}')
             m.upgrade(a,b);self.assertEqual((b/'workbench.py').read_text(),'new');self.assertEqual(p.read_text(),'{"done":true}')
+    def test_upgrade_preserves_saved_daytime_on_off_and_legacy_native_jobs(self):
+        for choice in [True,False,None]:
+            with self.subTest(choice=choice),tempfile.TemporaryDirectory() as t:
+                a,b=Path(t)/'new',Path(t)/'existing';make(a,'new');make(b,'old')
+                profile={'schedules':{'light':{'local_times':['10:00','14:00']},'jobs':[{'kind':'light','native_id':'existing-user-job','provider':'codex','readback':{'status':'ACTIVE'}}]}}
+                if choice is not None:profile['schedules']['light']['enabled']=choice
+                p=b/'workspace/profile.json';p.parent.mkdir(parents=True);p.write_text(json.dumps(profile));before=p.read_bytes()
+                m.upgrade(a,b)
+                self.assertEqual(p.read_bytes(),before)
+
     def test_local_edits_stop_before_any_write(self):
         with tempfile.TemporaryDirectory() as t:
             a,b=Path(t)/'new',Path(t)/'existing';make(a,'new');make(b,'old');(b/'workbench.py').write_text('my edit')

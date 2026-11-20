@@ -1,9 +1,9 @@
 const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const html=fs.readFileSync(path.join(__dirname,'../app/index.html'),'utf8');
 for(const [,code] of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(code);
-const names=['readableProse','messageText','formatMessage','responseVariants','replyCarousel','messageWithDealLinks'];
+const names=['dealRecordLinks','readableProse','messageText','formatMessage','responseVariants','replyCarousel','messageWithDealLinks'];
 const code=html.split('\n').filter(line=>names.some(name=>line.startsWith('function '+name+'('))).join('\n');
-const ctx=vm.createContext({esc:s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))});vm.runInContext(fs.readFileSync(path.join(__dirname,'../app/reply-links.js'),'utf8'),ctx);vm.runInContext(code,ctx);
+const ctx=vm.createContext({URL,data:{tasks:[],profile:{hubspot:{portal_id:'123456'}}},esc:s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))});vm.runInContext(fs.readFileSync(path.join(__dirname,'../app/reply-links.js'),'utf8'),ctx);vm.runInContext(code,ctx);
 const demo=JSON.parse(fs.readFileSync(path.join(__dirname,'../examples/demo-state.json'),'utf8')),draft=demo.communications.items.find(c=>c.response_variants?.length===3);
 assert.ok(draft,'Fictional example must provide three authored options');
 const result=ctx.replyCarousel(draft);assert.equal((result.match(/role="tab" /g)||[]).length,3);assert.equal((result.match(/role="tabpanel" /g)||[]).length,3);assert.match(result,/Default/);assert.match(result,/1 of 3/);assert.match(result,/data-reply-copy/);assert.match(ctx.formatMessage('1. First\n2. Second'),/<ol start="1">/);

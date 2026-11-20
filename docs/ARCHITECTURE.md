@@ -8,11 +8,11 @@ The core shared state is workspace/<demo-or-personal>/state.json. Explicit user 
 
 The runtime’s local APIs accept progress and suggestion updates only. CRM activity saves, field updates, sends, scheduling and demo generation happen through the assistant’s own tools and the new user’s explicit scope. The portable defaults permit none of those writes.
 
-The two automation files are prompts and proposed cadence, not installed jobs. Prefer one existing daily closeout and one weekly evidence review over more frequent overlapping scans. Keep durable changes in this project; source coverage and successful runs must be verified independently.
+The bundled automation files are prompts and proposed cadence, not installed jobs. After recurring consent, the default is one existing daily closeout. Daytime communication checks start off to reduce token use and need a separate explicit opt-in; saved suggested times alone never enable them. Preserve existing users' choices and verified native jobs on upgrade. Weekly evidence review remains optional. Prefer incremental checks over frequent overlapping scans. Keep durable changes in this project; source coverage and successful runs must be verified independently.
 
 The built-in exporter uses an allowlist. It excludes workspace/, live records, profiles, source transcripts, tokens, cookies, browser profiles, logs, personal evidence and unrecognized root files. Keep reusable workflow source in the shared internal repository and keep each user’s workspace private.
 
-Guided setup: /setup stores local preferences through app/onboarding.py. The same validation is available via workbench.py configure. /?mode=demo and /?mode=personal select separate local stores on the same server. The form never connects sources. read_requests are proposals awaiting chat approval, not authentication. The assistant verifies facts and records actual approved read scope.
+Assistant-led setup stays in Codex. `/setup` is a compatibility redirect to the normal app. Local preferences use app/onboarding.py through workbench.py configure or existing Settings controls. /?mode=demo and /?mode=personal select separate local stores on the same server. Local configuration never connects sources. read_requests are proposals awaiting chat approval, not authentication. The assistant verifies facts and records actual approved read scope.
 
 ## Product feedback and updates
 

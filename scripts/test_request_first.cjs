@@ -1,7 +1,7 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),path=require('node:path');
 const root=path.join(__dirname,'..'),html=fs.readFileSync(path.join(root,'app/index.html'),'utf8');
 for(const [,code] of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(code);
-const names=['cardBrief','briefSource','artifactLinks','requestExcerpt','decisionBrief','messageText','formatMessage','hasDraft','inlineDraft','taskEvidence','prose','readableProse','communicationAction','communicationChannel','responseVariants'];
+const names=['cardBrief','briefSource','artifactLinks','requestExcerpt','decisionBrief','notesForReview','messageText','formatMessage','hasDraft','inlineDraft','taskEvidence','prose','readableProse','communicationAction','communicationChannel','responseVariants'];
 const code=html.split('\n').filter(l=>names.some(n=>l.startsWith(`function ${n}(`))).join('\n');
 const demo=JSON.parse(fs.readFileSync(path.join(root,'examples/demo-state.json'),'utf8'));
 const ctx=vm.createContext({data:{...demo,communications:{items:[]}},context:()=>'',esc:s=>String(s??'').replaceAll('<','&lt;').replaceAll('"','&quot;')});vm.runInContext(code,ctx);

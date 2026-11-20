@@ -23,6 +23,47 @@ Keep one highlighted action; later rows stay collapsed. Preserve original
 deadlines, stable IDs, user edits, completed work, Undo/Reopen and source cursors.
 Copying a draft never proves sending, completion, a test result or customer acceptance.
 
+## Reply to the actual conversation
+
+Before preparing or refreshing any reply, read the exact latest incoming AND sent
+messages in the original DM, group DM, channel or email thread, including replies
+to older roots and relevant cross-channel answers. Reconcile current CRM state,
+bookings, delivered work and saved user edits. A task title or generic first-touch
+template cannot substitute for that conversation.
+
+Make a compact source-backed reply plan: what the other person said or requested,
+what has actually been handled, what the user still needs to communicate, and any
+useful unresolved question. Answer the latest message naturally first. If a rep
+booked a demo and asked the user to join a deal, and native CRM readback already
+confirms the assignment, acknowledge the booking and confirm the verified result
+before adding optional prep questions. Do not bury that answer under a customer
+brief or claim that an existing assignment was newly made.
+
+A completed system action can leave a separate acknowledgment worth sending;
+it does not reopen that action, prove a message was sent or create a new thank-you
+chore for every FYI. Preserve partial unanswered asks, completed stages, stable IDs
+and user wording. Check every response alternative against the same conversation.
+Keep drafts local and unsent unless this user separately authorizes sending.
+
+Source fingerprints, recent timestamps and asserted review flags do not judge
+whether wording makes conversational sense. The assistant must perform this
+meaning check using actual reviewed evidence. If relevant latest messages are
+unavailable, retain the source gap and keep the draft conditional rather than
+certifying a generic reply.
+
+## Direct Slack shortcuts
+
+While reviewing a Slack conversation, retain its exact native workspace/team ID
+and conversation or verified user ID with the original web URL. Use only the
+current user's actual signed-in source readback; never infer IDs from a name,
+workspace subdomain or another operator's installation. Supply verified delivery
+bindings as described in DATA-CONTRACT.md. Known native destinations open Slack
+directly without creating a redirect tab. Preserve the exact browser link as a
+fallback, particularly when the workspace or destination cannot be verified.
+Opening Slack or copying a message does not send it or complete the task. Do not
+close the Workbench tab, use a timed auto-close as proof of successful launch, or
+try to control Slack's cross-origin redirect page.
+
 ## Saved personal order
 
 Drag a card by its dotted handle to change its position within External or Internal work. The first card becomes highlighted. Use Arrow Up/Down, Home or End on the focused handle as a keyboard alternative. Reset order restores the recommended grouping and date order. User order is stored by stable task ID in workspace/<mode>/card-order.json, independently of completion, dates and imports. New tasks append in recommended order; hidden/completed IDs do not revive work. Preserve this file during upgrades.

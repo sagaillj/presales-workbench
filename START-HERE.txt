@@ -1,0 +1,27 @@
+WORKBENCH | WELCOME TO THE FUTURE
+
+Your co-pilot does the homework. You make the important calls.
+
+1. DOWNLOAD THE STARTER
+Download presales-workbench-starter-latest.zip and its matching .sha256 file from the same release. Keep the ZIP in Downloads. If your browser already extracted it, the folder works too. Keep any existing Workbench installation and private workspace intact.
+
+2. PASTE THE SETUP PROMPT INTO CODEX
+Open Codex with local access to Downloads. Copy the entire contents of 01_SETUP_PROMPT.txt into that chat. The same current prompt is included in the ZIP as SETUP-PROMPT.txt. Your assistant finds the requested download and sets it up in its own folder. You do not need to edit configuration files.
+
+3. GET ACQUAINTED
+Codex asks for clear consent to the bounded work-source orientation and whether you want ongoing upkeep. It learns your identity and working context from your own approved sources, then asks only about necessary gaps. It checks Python and asks before installing it if needed. Account sign-in or managed-device prompts may need your help.
+
+4. FIRST FULL REVIEW
+Codex runs the first full review of the approved sources, reconciles latest replies and completed actions, and imports real remaining tasks. A quiet result is fine. If a source is blocked or coverage is partial, it tells you exactly what remains. Reading this guide, importing a file or checking a card does not prove a real source review happened.
+
+5. OPEN NORMAL WORKBENCH
+After the first review and import, Codex opens normal Workbench at the verified local URL. One clearly labeled orientation card in Customer work and one in Internal work show you how the cards work. Mark them done, try Undo or Reopen, and make Workbench your own in Settings. These cards do not count as real work or estimated savings.
+
+YOU CONTROL THE AUTOPILOT
+The main review is proposed for weekdays at 17:30 in your verified local time zone, and is installed only with your explicit recurring-upkeep consent and actual native scheduler readback. Optional daytime checks start off; enable them later in Settings if you want them. No active jobs are bundled. External writes, messages and calendar invitations stay off until you specifically approve the applicable action or feature. Every teammate uses their own accounts, source access and permissions.
+
+FIRST-TEST CHECKLIST
+02_FIRST_TEST.txt is the current docs/FIRST-TEST.md from this release. It checks the actual first review, imported view and any agreed native schedules without inventing source coverage or completed work. The fictional sample is optional and separate from your personal work.
+
+UPDATING AN EXISTING INSTALL
+Read docs/UPGRADING.md before updating. Preserve workspace/profile, approvals, edits and progress. Use the verified ZIP and checksum from the same release. Your assistant should reuse completed setup and existing suitable jobs rather than start over or create duplicates.
