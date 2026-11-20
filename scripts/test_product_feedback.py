@@ -90,6 +90,20 @@ class FeedbackTests(unittest.TestCase):
   self.assertEqual(self.state(datetime(2026,11,23,1,tzinfo=timezone.utc))['week'],'2026-11-16')
  def test_progress_is_never_modified(self):
   before=json.dumps(self.progress,sort_keys=True);self.submit();self.assertEqual(before,json.dumps(self.progress,sort_keys=True))
+ def test_simple_checkin_uses_known_identity_and_one_computed_estimate(self):
+  self.progress['tasks']['a']['time_savings']={'version':1,'category':'prepared_reply','minutes_low':5,'minutes_high':15}
+  self.submit(simple_checkin=True,comments='Less friction',email='spoof@example.com',hours=99,include_counts=False,client_runtime={'browser':'Chrome','viewport':'large','url':'PRIVATE'})
+  p=self.posts[0][1];self.assertEqual(p['email'],'operator@example.com');self.assertEqual(p['hours'],.17);self.assertIsNotNone(p['counts']);self.assertEqual(p['metadata']['estimated_tasks_week'],1);self.assertFalse(p['metadata']['estimate_is_measured']);self.assertNotIn('PRIVATE',json.dumps(p));self.assertNotIn('spoof',json.dumps(p));self.assertIn('Usage metadata:',f.usage_text(p))
+ def test_simple_unknown_estimate_is_null_and_pending_retries_pin_metadata(self):
+  self.submit(simple_checkin=True);self.assertIsNone(self.posts[0][1]['hours'])
+ def test_simple_pending_retries_use_original_estimate_and_identity(self):
+  original=[]
+  def fail(url,p):original.append(p);raise OSError('timeout')
+  body={'action':'submit','week':'2026-11-16','rating':5,'simple_checkin':True,'comments':'Keep it'}
+  f.update(self.folder,body,self.progress,self.contact,'operator@example.com',self.now,post=fail)
+  self.progress['tasks']['a']['time_savings']={'version':1,'minutes_low':5,'minutes_high':15}
+  f.update(self.folder,body,self.progress,self.contact,'changed@example.com',self.now,post=self.receipt)
+  self.assertEqual(self.posts[0][1],original[0])
  def release(self,tag='v0.6.0'):
   base='https://github.com/'+f.REPOSITORY;return {'tag_name':tag,'html_url':base+'/releases/tag/'+tag,'assets':[{'name':n,'browser_download_url':base+'/releases/download/'+tag+'/'+n} for n in ['presales-workbench-starter-latest.zip','presales-workbench-starter-latest.sha256']]}
  def test_update_check_pins_checked_release_and_sends_no_private_data(self):

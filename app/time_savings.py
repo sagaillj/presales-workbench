@@ -60,7 +60,9 @@ def savings_summary(progress, now=None, zone='America/New_York', month=None, ret
             low += a; high += b; estimated += 1
         result[period] = {'minutes_low': low, 'minutes_high': high,
                           'hours_low': round(low / 60, 2), 'hours_high': round(high / 60, 2),
-                          'estimated_tasks': estimated, 'unestimated_tasks': unestimated}
+                          'estimated_tasks': estimated, 'unestimated_tasks': unestimated,
+                          'hours_estimated': min(168,round((low + high) / 120, 2)) if estimated else (None if unestimated else 0),
+                          'estimate_method': 'midpoint_of_category_assumptions_v1'}
     months = {}
     if requested_month is None:
         keys = {month}

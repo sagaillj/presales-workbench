@@ -43,7 +43,7 @@ def form_config(contact):
 def counts(folder,progress,now,zone):
     saved=read(Path(folder)/'product-feedback.json',{});week=week_key(now);done=0
     for row in progress.get('tasks',{}).values():
-        if not isinstance(row,dict) or not row.get('done') or not isinstance(row.get('updated_at'),str):continue
+        if not isinstance(row,dict) or not row.get('done') or row.get('completion_kind')=='orientation' or not isinstance(row.get('updated_at'),str):continue
         try:
             at=datetime.fromisoformat(row['updated_at'].replace('Z','+00:00'))
             if at.tzinfo and week<=now_at(at,zone).date().isoformat()<=now.date().isoformat():done+=1
@@ -67,24 +67,60 @@ def summary(folder,progress,now=None,zone='UTC',contact=None,operator=None,force
     first=not any(row.get('status') in DONE for row in saved.get('weeks',{}).values())
     due=eligibility['eligible'] and saved.get('enabled',True) and (force or first and scheduled or record.get('status') in {'submission_pending','form_opened'} or now.weekday()>=4 and scheduled) and record.get('status') not in DONE
     cfg=form_config(contact)
-    return {**eligibility,'week':week,'due':bool(due),'enabled':saved.get('enabled',True),'cadence_weeks':cadence,'record':record,'counts':counts(folder,progress,now,zone),'time_savings':savings_summary(progress,now,zone,retrospective=read(Path(folder)/'time-savings-ledger.json',{})),'version':VERSION,'submission_reference':hashlib.sha256((saved['installation_id']+':'+week).encode()).hexdigest() if saved.get('installation_id') else None,'email':record.get('email',operator if valid_email(operator) else ''),'destination':{'configured':cfg['configured'],'direct':cfg['direct'],'form_available':cfg['form_valid'],'label':'Workbench feedback · Google Form'},'privacy':'Share your rating, optional comments and time estimate. Include local usage counts only if you choose. No deal names, messages or transcripts.'}
+    return {**eligibility,'week':week,'due':bool(due),'enabled':saved.get('enabled',True),'cadence_weeks':cadence,'record':record,'counts':counts(folder,progress,now,zone),'time_savings':savings_summary(progress,now,zone,retrospective=read(Path(folder)/'time-savings-ledger.json',{})),'version':VERSION,'submission_reference':hashlib.sha256((saved['installation_id']+':'+week).encode()).hexdigest() if saved.get('installation_id') else None,'email':record.get('email',operator if valid_email(operator) else ''),'destination':{'configured':cfg['configured'],'direct':cfg['direct'],'form_available':cfg['form_valid'],'label':'Workbench feedback · Google Form'},'privacy':'Feedback and aggregate usage estimates are shared only when you submit. No task text, customer names, messages or transcripts are collected.'}
+def usage_metadata(folder,progress,saved,now,zone,client=None):
+    """Aggregate product signals only. Never serialize task/source content."""
+    savings=savings_summary(progress,now,zone,retrospective=read(Path(folder)/'time-savings-ledger.json',{}))
+    dates=set()
+    for value in saved.get('active_dates',[]):
+        try:
+            date=datetime.strptime(value,'%Y-%m-%d').date()
+            if date<=now.date():dates.add(date)
+        except (ValueError,TypeError):pass
+    events={'done':0,'reopened':0,'notes':0}
+    for row in progress.get('updates',[]):
+        if not isinstance(row,dict):continue
+        try:
+            at=now_at(datetime.fromisoformat(row.get('at','').replace('Z','+00:00')),zone)
+            if not week_key(now)<=at.date().isoformat()<=now.date().isoformat() or at>now:continue
+        except (TypeError,ValueError,AttributeError):continue
+        kind=row.get('kind')
+        if kind in {'done','completed'}:events['done']+=1
+        elif kind in {'reopen','reopened'}:events['reopened']+=1
+        elif kind in {'note','progress'}:events['notes']+=1
+    client=client if isinstance(client,dict) else {}
+    return {'schema':1,'os':sys.platform if sys.platform in {'win32','darwin','linux'} else 'other',
+            'python':str(sys.version_info.major)+'.'+str(sys.version_info.minor),
+            'browser':client.get('browser') if client.get('browser') in {'Edge','Firefox','Chrome','Safari','Other'} else 'Other',
+            'viewport':client.get('viewport') if client.get('viewport') in {'small','medium','large'} else 'unknown',
+            'active_days_total':len(dates),'active_days_30d':sum(now.date()-timedelta(days=29)<=day<=now.date() for day in dates),
+            'estimated_tasks_week':savings['week']['estimated_tasks'],'unestimated_tasks_week':savings['week']['unestimated_tasks'],
+            'estimated_tasks_month':savings['month']['estimated_tasks'],'unestimated_tasks_month':savings['month']['unestimated_tasks'],
+            'hours_estimated_week':savings['week']['hours_estimated'],'hours_estimated_month':savings['month']['hours_estimated'],
+            'estimate_method':'midpoint_of_category_assumptions_v1','estimate_is_measured':False,
+            'task_events_week':events,'feedback_cadence_weeks':saved.get('cadence_weeks',1)}
+
 def payload(body,saved,week,folder,progress,now,zone,operator):
     rating=body.get('rating')
     if type(rating) is not int or not 0<=rating<=10:raise ValueError('Choose a rating from 0 to 10')
     hours=body.get('hours')
     if hours in ['',None]:hours=None
     elif isinstance(hours,bool) or not isinstance(hours,(int,float)) or not 0<=hours<=168 or not math.isfinite(hours):raise ValueError('Hours saved must be between 0 and 168, or blank')
-    comments=body.get('comments','');email=body.get('email',operator or '')
+    simple=body.get('simple_checkin') is True
+    metadata=usage_metadata(folder,progress,saved,now,zone,body.get('client_runtime')) if simple else None
+    if simple:hours=metadata['hours_estimated_week']
+    comments=body.get('comments','');email=(operator if valid_email(operator) else '') if simple else body.get('email',operator or '')
     if not isinstance(comments,str) or len(comments)>2000:raise ValueError('Keep feedback to 2,000 characters')
     if not isinstance(email,str) or email and not valid_email(email):raise ValueError('Use a valid work email or leave it blank')
-    include=body.get('include_counts',True)
+    include=True if simple else body.get('include_counts',True)
     if type(include) is not bool:raise ValueError('Choose whether to include local counts')
     install=saved.setdefault('installation_id',str(uuid.uuid4()));key=hashlib.sha256((install+':'+week).encode()).hexdigest()
-    return {'schema':1,'submission_id':key,'week':week,'rating':rating,'hours':hours,'comments':comments.strip(),'email':email.strip(),'counts':counts(folder,progress,now,zone) if include else None,'version':VERSION}
+    return {'schema':1,'submission_id':key,'week':week,'rating':rating,'hours':hours,'comments':comments.strip(),'email':email.strip(),'counts':counts(folder,progress,now,zone) if include else None,'version':VERSION,**({'metadata':metadata} if metadata is not None else {})}
 def usage_text(p):
     lines=['Week of '+p['week'],'Workbench '+p['version']]
     if p['counts'] is not None:lines+=['Days opened: '+str(p['counts']['active_days']),'Tasks marked done: '+str(p['counts']['tasks_marked_done']),'Checkbox completions are user-reported, not verified deliveries.']
     else:lines+=['Usage counts not included.']
+    if p.get('metadata'):lines+=['Usage metadata: '+json.dumps(p['metadata'],separators=(',',':'),sort_keys=True)]
     return '\n'.join(lines+['Submission reference: '+p['submission_id']])
 def prefill(cfg,p):
     if not cfg['form_valid']:raise ValueError('Google Form is not configured')
@@ -151,7 +187,7 @@ def _update(folder,body,progress,contact,operator,now,zone,post):
             p=payload(body,saved,week,folder,progress,now,zone,operator)
             if old.get('status')=='submission_pending':
                 original=old.get('payload',{})
-                for key in ['rating','hours','comments','email']:
+                for key in (['rating','comments'] if body.get('simple_checkin') is True else ['rating','hours','comments','email']):
                     if p[key]!=original.get(key):raise ValueError('Retry your previous submission before editing it. Its saved status is still unknown.')
                 p=original
             row={'rating':p['rating'],'hours':p['hours'],'comments':p['comments'],'email':p['email'],'include_counts':p['counts'] is not None,'updated_at':now.isoformat(),'payload':p}
